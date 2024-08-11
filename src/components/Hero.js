@@ -1,4 +1,3 @@
-// components/Hero.js
 export default function Hero() {
   return (
     <section className="hero bg-gray-100 p-10 text-center rounded-lg shadow-lg">

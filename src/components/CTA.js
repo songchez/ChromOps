@@ -1,4 +1,3 @@
-// components/CTA.js
 export default function CTA() {
   return (
     <section className="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-8 text-center rounded-lg mt-10">
