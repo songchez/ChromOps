@@ -1,4 +1,3 @@
-import BottomNav from "@/components/BottomNav";
 import CTA from "@/components/CTA";
 import Features from "@/components/Features";
 import Footer from "@/components/Footer";
@@ -11,7 +10,6 @@ export default function Home() {
       <Features />
       <CTA />
       <Footer />
-      <BottomNav />
     </div>
   );
 }

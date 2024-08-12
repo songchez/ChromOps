@@ -1,7 +1,8 @@
 import { Gothic_A1 } from "next/font/google";
+import BottomNav from "@/components/BottomNav";
 import "./globals.css";
 
-const gothic = Gothic_A1({ weight: ["300"], subsets: ["latin"] });
+const gothic = Gothic_A1({ weight: ["500"], subsets: ["latin"] });
 
 export const metadata = {
   title: "예쓰샵",
@@ -10,8 +11,9 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="ko" theme={cmyk}>
+    <html lang="ko" theme={"cmyk"}>
       <body className={gothic.className}>{children}</body>
+      <BottomNav />
     </html>
   );
 }
