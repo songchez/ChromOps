@@ -12,8 +12,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="ko" theme={"cmyk"}>
-      <body className={gothic.className}>{children}</body>
-      <BottomNav />
+      <body className={gothic.className}>
+        {children}
+        <BottomNav />
+      </body>
     </html>
   );
 }

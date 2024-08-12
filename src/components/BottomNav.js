@@ -1,28 +1,62 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
-import { FaHome } from "react-icons/fa";
-import { FaShoppingBag } from "react-icons/fa";
-import { FaFeatherAlt } from "react-icons/fa";
-import { FaCommentAlt } from "react-icons/fa";
+import {
+  FaHome,
+  FaShoppingBag,
+  FaFeatherAlt,
+  FaCommentAlt,
+} from "react-icons/fa";
+
+function NavItem({ href, icon: Icon, label, selected, setSelected }) {
+  return (
+    <Link href={href}>
+      <div
+        className={`flex flex-col items-center ${
+          selected === label ? "text-blue-500" : ""
+        }`}
+        onClick={() => setSelected(label)}
+      >
+        <Icon className="h-7 w-7" />
+      </div>
+    </Link>
+  );
+}
 
 export default function BottomNav() {
+  const [selected, setSelected] = useState("");
+
   return (
     <nav className="fixed inset-x-0 bottom-0 bg-white p-4 shadow-lg flex justify-around text-gray-700">
-      <Link href="/" className="flex flex-col items-center">
-        <FaHome className="h-6 w-6" />
-        <span className="text-xs mt-1">Home</span>
-      </Link>
-      <Link href="/shop" className="flex flex-col items-center">
-        <FaShoppingBag className="h-6 w-6" />
-        <span className="text-xs mt-1">Shop</span>
-      </Link>
-      <Link href="/blog" className="flex flex-col items-center">
-        <FaFeatherAlt className="h-6 w-6" />
-        <span className="text-xs mt-1">Blog</span>
-      </Link>
-      <Link href="/community" className="flex flex-col items-center">
-        <FaCommentAlt className="h-6 w-6" />
-        <span className="text-xs mt-1">Community</span>
-      </Link>
+      <NavItem
+        href="/"
+        icon={FaHome}
+        label="home"
+        selected={selected}
+        setSelected={setSelected}
+      />
+      <NavItem
+        href="/shop"
+        icon={FaShoppingBag}
+        label="shop"
+        selected={selected}
+        setSelected={setSelected}
+      />
+      <NavItem
+        href="/blog"
+        icon={FaFeatherAlt}
+        label="blog"
+        selected={selected}
+        setSelected={setSelected}
+      />
+      <NavItem
+        href="/community"
+        icon={FaCommentAlt}
+        label="community"
+        selected={selected}
+        setSelected={setSelected}
+      />
     </nav>
   );
 }
