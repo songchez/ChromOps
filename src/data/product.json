@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "name": "샌즈 바라클라바",
+    "price": 14990,
+    "image": "/images/thumnails/1.jpg"
+  },
+  {
+    "id": 2,
+    "name": "악마바라클라바",
+    "price": 13990,
+    "image": "/images/thumnails/2.jpg"
+  }
+]

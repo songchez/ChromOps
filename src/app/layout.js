@@ -1,6 +1,6 @@
 import { Gothic_A1 } from "next/font/google";
-import BottomNav from "@/components/BottomNav";
 import "./globals.css";
+import BottomNav from "@/components/main/BottomNav";
 
 const gothic = Gothic_A1({ weight: ["500"], subsets: ["latin"] });
 

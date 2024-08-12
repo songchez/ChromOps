@@ -1,7 +1,7 @@
-import CTA from "@/components/CTA";
-import Features from "@/components/Features";
-import Footer from "@/components/Footer";
-import Hero from "@/components/Hero";
+import CTA from "@/components/main/CTA";
+import Features from "@/components/main/Features";
+import Footer from "@/components/main/Footer";
+import Hero from "@/components/main/Hero";
 
 export default function Home() {
   return (
