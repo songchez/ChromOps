@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@sendbird/uikit-react": "^3.14.14",
     "daisyui": "^4.12.10",
     "gray-matter": "^4.0.3",
     "next": "14.2.5",
