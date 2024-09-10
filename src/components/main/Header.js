@@ -1,10 +1,20 @@
+import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 export default function Header() {
   return (
     <header className="bg-black py-4">
       <div className="container mx-auto flex justify-between items-center">
-        <h1 className="text-2xl font-bold">ChromOps</h1>
+        <Link href="/">
+          <Image
+            width={140}
+            height={100}
+            src={"/images/Logo.png"}
+            alt="logo"
+          ></Image>
+        </Link>
+
         <nav>
           <ul className="flex space-x-4">
             <li>
