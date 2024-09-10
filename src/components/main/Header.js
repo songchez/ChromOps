@@ -8,22 +8,22 @@ export default function Header() {
         <nav>
           <ul className="flex space-x-4">
             <li>
-              <a href="#" className="hover:text-yellow-500">
+              <a href="/" className="hover:text-yellow-500">
                 Home
               </a>
             </li>
             <li>
-              <a href="#" className="hover:text-yellow-500">
+              <a href="/shop" className="hover:text-yellow-500">
                 Collections
               </a>
             </li>
             <li>
-              <a href="#" className="hover:text-yellow-500">
-                About
+              <a href="/blog" className="hover:text-yellow-500">
+                Blog
               </a>
             </li>
             <li>
-              <a href="#" className="hover:text-yellow-500">
+              <a href="/Contact" className="hover:text-yellow-500">
                 Contact
               </a>
             </li>

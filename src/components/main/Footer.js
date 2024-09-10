@@ -1,20 +1,20 @@
+import { FaInstagram } from "react-icons/fa6";
+import { FaYoutube } from "react-icons/fa6";
+
 export default function Footer() {
   return (
     <footer className="bg-black py-8">
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
         <div className="mb-4 md:mb-0">
           <h3 className="text-xl font-bold mb-2">ChromOps</h3>
-          <p>당신의 승리를 위한 전술적 파트너</p>
+          <p>Copyright © 2023 ChromOps</p>
         </div>
-        <div className="flex space-x-4">
+        <div className="flex space-x-4 text-2xl">
           <a href="#" className="hover:text-yellow-500">
-            Instagram
+            <FaInstagram />
           </a>
           <a href="#" className="hover:text-yellow-500">
-            Facebook
-          </a>
-          <a href="#" className="hover:text-yellow-500">
-            YouTube
+            <FaYoutube />
           </a>
         </div>
       </div>

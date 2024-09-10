@@ -1,4 +1,5 @@
 import Image from "next/image";
+import products from "../../data/products.json";
 
 export default function Collection() {
   return (
@@ -8,24 +9,25 @@ export default function Collection() {
           당신을 위한 전술적 선택
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Repeat this block for each product */}
-          <div className="bg-gray-800 rounded-lg overflow-hidden">
-            <Image
-              src="/product-1.jpg"
-              alt="Tactical Jacket"
-              width={400}
-              height={300}
-              layout="responsive"
-            />
-            <div className="p-4">
-              <h3 className="text-xl font-bold mb-2">전술 재킷</h3>
-              <p className="mb-4">내구성과 기능성을 갖춘 혁신적인 디자인</p>
-              <button className="bg-yellow-500 text-black px-4 py-2 rounded font-bold hover:bg-yellow-600 transition duration-300">
-                자세히 보기
-              </button>
+          {products.map((product) => (
+            <div
+              key={product.id}
+              className="bg-gray-800 rounded-sm overflow-hidden"
+            >
+              <Image
+                src={`/products/${product.id}/thumbnail_1.jpg`}
+                alt={product.name}
+                width={300}
+                height={250}
+                layout="responsive"
+              />
+              <div className="p-4">
+                <h3 className="text-xl font-bold mb-2">{product.name}</h3>
+                <p className="mb-4">{product.description}</p>
+                <p> {product.price}₩</p>
+              </div>
             </div>
-          </div>
-          {/* End of product block */}
+          ))}
         </div>
       </div>
     </section>

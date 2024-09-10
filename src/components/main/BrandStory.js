@@ -5,14 +5,14 @@ export default function BrandStory() {
     <section className="py-16 bg-gray-800">
       <div className="container mx-auto">
         <h2 className="text-3xl font-bold mb-8 text-center">
-          Operation Chromite에서 영감을 받다
+          Operation Chromite
         </h2>
         <div className="flex flex-col md:flex-row items-center">
           <div className="md:w-1/2 mb-8 md:mb-0">
             <Image
-              src="/operation-chromite.jpg"
+              src="/images/operation-chromite.png"
               alt="Operation Chromite"
-              width={500}
+              width={300}
               height={300}
               layout="responsive"
             />

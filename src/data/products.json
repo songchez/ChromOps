@@ -1,0 +1,18 @@
+[
+  {
+    "id": "00001",
+    "name": "Tactical jacket",
+    "price": 64990,
+    "description": "내구성과 기능성을 겸비한 아웃도어 택티컬 자켓",
+    "category": "outer",
+    "slug": "tactical-jacket"
+  },
+  {
+    "id": "00002",
+    "name": "1970's airforce",
+    "price": 73990,
+    "description": "따뜻하고 탄탄한 항공점퍼",
+    "category": "outer",
+    "slug": "airforce-jacket"
+  }
+]
