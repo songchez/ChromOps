@@ -7,9 +7,7 @@ export default function Collection() {
     <section className="py-16">
       <div className="container mx-auto">
         <div className="flex justify-between items-center">
-          <h2 className="text-3xl font-bold mb-8 text-center">
-            2024&apos;s Tactical Collections
-          </h2>
+          <h2 className="text-3xl font-bold mb-8 text-center">Best items</h2>
           <Link className="text-right text-zinc-300" href="/shop">
             더 알아보기
           </Link>

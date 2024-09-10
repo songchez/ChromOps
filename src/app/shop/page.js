@@ -9,7 +9,7 @@ export default function ShopPage() {
           key={product.id}
           className="rounded-sm overflow-hidden hover:opacity-90"
         >
-          <Link href={`/shop/${product.id}`}>
+          <Link href={`/shop/${product.slug}`}>
             <Image
               src={`/products/${product.id}/thumbnail_1.jpg`}
               alt={product.name}
