@@ -14,7 +14,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ko" theme={"black"}>
       <body className={gothic.className}>
-        <div className="bg-gray-900 text-white min-h-screen">
+        <div className="bg-slate-950 text-white min-h-screen">
           <Header />
           {children}
           <Footer />

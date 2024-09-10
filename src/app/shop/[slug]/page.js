@@ -1,4 +1,3 @@
-// src/app/shop/[slug]/page.js
 import React from "react";
 import products from "../../../data/products.json"; // Adjust this path if necessary
 import Image from "next/image";
@@ -18,7 +17,7 @@ export default function ProductPage({ params }) {
       <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 mb-10">
         <div className="w-full lg:w-1/2">
           <div className="carousel w-full">
-            {product.thumbnails.map((thumbnail, index) => (
+            {product.map((thumbnail) => (
               <div key={index} className="carousel-item w-full">
                 <Image
                   src={thumbnail}
@@ -47,7 +46,7 @@ export default function ProductPage({ params }) {
       <div className="mt-10">
         <h2 className="text-2xl font-bold mb-6">상품 상세 이미지</h2>
         <Image
-          src={product.thumbnails[0]} // Use a detailed image if available
+          src={`/products/${product.id}/detail_page.jpg`} // Use a detailed image if available
           alt={product.name}
           width={870}
           height={2000}
