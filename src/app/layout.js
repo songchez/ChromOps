@@ -1,20 +1,18 @@
 import { Gothic_A1 } from "next/font/google";
 import "./globals.css";
-import BottomNav from "@/components/main/BottomNav";
 
 const gothic = Gothic_A1({ weight: ["500"], subsets: ["latin"] });
 
 export const metadata = {
-  title: "예쓰샵",
-  description: "예쁜쓰레기들만 모아놓은 힙한편집샵",
+  title: "ChromOps",
+  description: "역전, 승리, 크로몹스",
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="ko" theme={"cmyk"}>
+    <html lang="ko" theme={"black"}>
       <body className={gothic.className}>
-        {children}
-        <BottomNav />
+        <div className="bg-gray-900 text-white min-h-screen">{children}</div>
       </body>
     </html>
   );
