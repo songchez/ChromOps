@@ -1,5 +1,5 @@
 import React from "react";
-import products from "../../../data/products.json"; // Adjust this path if necessary
+import products from "@/data/products.json";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { FaCartShopping, FaStar } from "react-icons/fa6";

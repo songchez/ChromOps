@@ -1,5 +1,5 @@
 import Image from "next/image";
-import products from "../../data/products.json";
+import products from "@/data/products.json";
 import Link from "next/link";
 export default function ShopPage() {
   return (
