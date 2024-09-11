@@ -21,7 +21,9 @@ export default function ShopPage() {
               <h3 className="text-sm md:text-md font-light mb-2">
                 {product.name}
               </h3>
-              <p className="text-sm">₩{product.price}</p>
+              <p className="text-sm">
+                {product.price.toLocaleString("ko-KR")}원
+              </p>
             </div>
           </Link>
         </div>

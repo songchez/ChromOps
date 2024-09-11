@@ -27,7 +27,7 @@ export default function ProductPage({ params }) {
               <p className="text-gray-400">{product.description}</p>
               <div className="flex items-center space-x-2">
                 <span className="text-2xl font-semibold">
-                  {product.price}원
+                  {product.price.toLocaleString("ko-KR")}원
                 </span>
                 <div>
                   <div className="flex items-center">

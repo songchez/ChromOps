@@ -7,7 +7,10 @@ export default function Collection() {
     <section className="py-16">
       <div className="container mx-auto">
         <div className="flex justify-between items-center">
-          <h2 className="text-3xl font-bold mb-8 text-center">Best items</h2>
+          <h2 className="text-2xl font-bold mb-8 text-center">
+            <h3 className="text-xl font-bold text-left">BEST ITEMS</h3>
+            가장 사랑받는 아이템
+          </h2>
           <Link className="text-right text-zinc-300" href="/shop">
             더 알아보기
           </Link>
@@ -31,7 +34,9 @@ export default function Collection() {
                     <div className="p-4">
                       <h3 className="text-md font-bold mb-2">{product.name}</h3>
                       <p className="text-xs mb-4">{product.description}</p>
-                      <p className="text-sm">₩{product.price}</p>
+                      <p className="text-sm">
+                        {product.price.toLocaleString("ko-KR")}원
+                      </p>
                     </div>
                   </Link>
                 </div>
