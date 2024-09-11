@@ -15,13 +15,13 @@ export default function Contact() {
   };
 
   return (
-    <div className="container mx-auto p-4 m-16 w-1/4">
+    <div className="flex flex-col gap-4 container mx-auto p-4 m-16 w-full md:w-1/2 xl:w-1/4">
       <h1 className="text-3xl font-bold mb-4">Contact us</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div className="form-control">
-          <label>Name</label>
+          <label>이름</label>
           <input
-            className="input text-black"
+            className="input text-black rounded-sm"
             type="text"
             value={name}
             onChange={(e) => setName(e?.target?.value ?? "")}
@@ -29,9 +29,9 @@ export default function Contact() {
           />
         </div>
         <div className="form-control">
-          <label>Email</label>
+          <label>이메일</label>
           <input
-            className="input text-black"
+            className="input text-black rounded-sm"
             type="email"
             value={email}
             onChange={(e) => setEmail(e?.target?.value ?? "")}
@@ -39,20 +39,20 @@ export default function Contact() {
           />
         </div>
         <div className="form-control">
-          <label>Message</label>
+          <label>메시지</label>
           <textarea
-            className="textarea text-black"
+            className="textarea text-black rounded-sm"
             value={message}
             onChange={(e) => setMessage(e?.target?.value ?? "")}
             placeholder="Your message"
           />
         </div>
-        <button type="submit" color="primary">
-          Submit
+        <button type="submit" className="btn btn-primary rounded-sm m-5">
+          메일보내기
         </button>
       </form>
       <p className="mt-4">
-        You can also email me directly at{" "}
+        B2B, 도매, 공동구매, 마케팅 문의 ▼{" "}
         <a href="mailto:tama4840@gmail.com">tama4840@gmail.com</a>
       </p>
     </div>
