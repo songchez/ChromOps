@@ -5,7 +5,11 @@
     "price": 64990,
     "description": "내구성과 기능성을 겸비한 아웃도어 택티컬 자켓",
     "category": "outer",
-    "slug": "tactical-jacket"
+    "slug": "tactical-jacket",
+    "rating": 4.5,
+    "reviewCount": 512,
+    "colors": ["navy", "black"],
+    "sizes": ["M", "L", "XL", "2XL"]
   },
   {
     "id": "00002",
@@ -13,7 +17,11 @@
     "price": 73990,
     "description": "따뜻하고 탄탄한 항공점퍼",
     "category": "outer",
-    "slug": "airforce-jacket"
+    "slug": "airforce-jacket",
+    "rating": 4.5,
+    "reviewCount": 512,
+    "colors": ["navy", "black"],
+    "sizes": ["M", "L", "XL", "2XL"]
   },
   {
     "id": "00001",
@@ -21,7 +29,11 @@
     "price": 64990,
     "description": "내구성과 기능성을 겸비한 아웃도어 택티컬 자켓",
     "category": "outer",
-    "slug": "tactical-jacket"
+    "slug": "tactical-jacket",
+    "rating": 4.5,
+    "reviewCount": 512,
+    "colors": ["navy", "black"],
+    "sizes": ["M", "L", "XL", "2XL"]
   },
   {
     "id": "00002",
@@ -29,7 +41,11 @@
     "price": 73990,
     "description": "따뜻하고 탄탄한 항공점퍼",
     "category": "outer",
-    "slug": "airforce-jacket"
+    "slug": "airforce-jacket",
+    "rating": 4.5,
+    "reviewCount": 512,
+    "colors": ["navy", "black"],
+    "sizes": ["M", "L", "XL", "2XL"]
   },
   {
     "id": "00001",
@@ -37,7 +53,11 @@
     "price": 64990,
     "description": "내구성과 기능성을 겸비한 아웃도어 택티컬 자켓",
     "category": "outer",
-    "slug": "tactical-jacket"
+    "slug": "tactical-jacket",
+    "rating": 4.5,
+    "reviewCount": 512,
+    "colors": ["navy", "black"],
+    "sizes": ["M", "L", "XL", "2XL"]
   },
   {
     "id": "00002",
@@ -45,6 +65,10 @@
     "price": 73990,
     "description": "따뜻하고 탄탄한 항공점퍼",
     "category": "outer",
-    "slug": "airforce-jacket"
+    "slug": "airforce-jacket",
+    "rating": 4.5,
+    "reviewCount": 512,
+    "colors": ["navy", "black"],
+    "sizes": ["M", "L", "XL", "2XL"]
   }
 ]

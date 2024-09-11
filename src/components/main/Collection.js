@@ -20,18 +20,20 @@ export default function Collection() {
                   key={product.id}
                   className="bg-white text-black rounded-sm overflow-hidden"
                 >
-                  <Image
-                    src={`/products/${product.id}/thumbnail_1.jpg`}
-                    alt={product.name}
-                    width={300}
-                    height={250}
-                    layout="responsive"
-                  />
-                  <div className="p-4">
-                    <h3 className="text-md font-bold mb-2">{product.name}</h3>
-                    <p className="text-xs mb-4">{product.description}</p>
-                    <p className="text-sm">₩{product.price}</p>
-                  </div>
+                  <Link href={`/shop/${product.slug}`}>
+                    <Image
+                      src={`/products/${product.id}/thumbnail_1.jpg`}
+                      alt={product.name}
+                      width={300}
+                      height={250}
+                      layout="responsive"
+                    />
+                    <div className="p-4">
+                      <h3 className="text-md font-bold mb-2">{product.name}</h3>
+                      <p className="text-xs mb-4">{product.description}</p>
+                      <p className="text-sm">₩{product.price}</p>
+                    </div>
+                  </Link>
                 </div>
               )
           )}
