@@ -1,10 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { FaCartShopping, FaMagnifyingGlass, FaUser } from "react-icons/fa6";
 
 export default function Header() {
   return (
-    <header className="bg-black py-4">
+    <header className="bg-black py-4 overflow-auto">
       <div className="container mx-auto flex justify-between items-center">
         <Link href="/">
           <Image
@@ -37,22 +38,17 @@ export default function Header() {
           >
             <li>
               <a href="/" className="hover:text-yellow-500">
-                Home
+                로그인
               </a>
             </li>
             <li>
-              <a href="/shop" className="hover:text-yellow-500">
-                Collections
+              <a href="/" className="hover:text-yellow-500">
+                회원가입
               </a>
             </li>
             <li>
-              <a href="/blog" className="hover:text-yellow-500">
-                Blog
-              </a>
-            </li>
-            <li>
-              <a href="/Contact" className="hover:text-yellow-500">
-                Contact
+              <a href="/" className="hover:text-yellow-500">
+                장바구니
               </a>
             </li>
           </ul>
@@ -61,23 +57,13 @@ export default function Header() {
         <nav className="hidden lg:flex">
           <ul className="flex space-x-4">
             <li>
-              <a href="/" className="hover:text-yellow-500">
-                Home
+              <a href="/" className="hover:text-yellow-500 text-xl">
+                <FaCartShopping />
               </a>
             </li>
             <li>
-              <a href="/shop" className="hover:text-yellow-500">
-                Collections
-              </a>
-            </li>
-            <li>
-              <a href="/blog" className="hover:text-yellow-500">
-                Blog
-              </a>
-            </li>
-            <li>
-              <a href="/contact" className="hover:text-yellow-500">
-                Contact
+              <a href="/" className="hover:text-yellow-500 text-xl">
+                <FaUser />
               </a>
             </li>
           </ul>

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Hero() {
   return (
@@ -18,9 +19,12 @@ export default function Hero() {
         <p className="text-xl mb-8">
           패션은 단순한 옷이 아니라, 승리의 전략입니다.
         </p>
-        <button className="bg-zinc-300 text-black px-8 py-3 rounded-sm font-bold hover:bg-yellow-600 transition duration-300">
+        <Link
+          href="/shop"
+          className="bg-zinc-300 text-black px-8 py-3 rounded-sm font-bold hover:bg-yellow-600 transition duration-300"
+        >
           둘러보기
-        </button>
+        </Link>
       </div>
     </section>
   );

@@ -2,6 +2,7 @@ import { Gothic_A1 } from "next/font/google";
 import Footer from "@/components/main/Footer";
 import Header from "@/components/main/Header";
 import "./globals.css";
+import HeaderCategory from "@/components/main/HeaderCategory";
 
 const gothic = Gothic_A1({ weight: ["500"], subsets: ["latin"] });
 
@@ -16,6 +17,7 @@ export default function RootLayout({ children }) {
       <body className={gothic.className}>
         <div className="bg-slate-950 text-white min-h-screen">
           <Header />
+          <HeaderCategory />
           {children}
           <Footer />
         </div>

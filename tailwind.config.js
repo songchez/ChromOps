@@ -11,6 +11,7 @@ module.exports = {
         olive: "#242E16",
         navy: "#000080",
         beige: "#9f8473",
+        primary: "#9a802d",
       },
     },
   },
