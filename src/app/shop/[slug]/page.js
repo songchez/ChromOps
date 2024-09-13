@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { FaAngleRight, FaCartShopping, FaStar } from "react-icons/fa6";
 import ColorAndSize from "@/components/productPage/ColorAndSize";
 import Carousel from "@/components/productPage/Carousel";
+import AddToCart from "@/components/productPage/AddToCart";
 
 export default function ProductPage({ params }) {
   const { slug } = params;
@@ -49,11 +50,9 @@ export default function ProductPage({ params }) {
               </div>
               {/* 컬러와사이즈 (client side) */}
               <ColorAndSize colors={product.colors} sizes={product.sizes} />
+
               <div className="flex space-x-2 w-52">
-                <button className="btn w-full text-black py-3 rounded-sm flex items-center justify-center">
-                  <FaCartShopping className="mr-2" />
-                  장바구니담기
-                </button>
+                <AddToCart product={product} />
                 <button className="btn w-full bg-blue-900 text-white py-3 rounded-sm flex items-center justify-center">
                   바로구매
                   <FaAngleRight />

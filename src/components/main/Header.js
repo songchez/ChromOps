@@ -55,7 +55,7 @@ export default function Header() {
           <nav className="hidden lg:flex">
             <ul className="flex space-x-4">
               <li>
-                <a href="/" className="hover:text-yellow-500 text-xl">
+                <a href="/cart" className="hover:text-yellow-500 text-xl">
                   <FaCartShopping />
                 </a>
               </li>
