@@ -2,7 +2,7 @@ import React from "react";
 import products from "@/data/products.json";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { FaCartShopping, FaStar } from "react-icons/fa6";
+import { FaAngleRight, FaCartShopping, FaStar } from "react-icons/fa6";
 import ColorAndSize from "@/components/productPage/ColorAndSize";
 import Carousel from "@/components/productPage/Carousel";
 
@@ -23,7 +23,7 @@ export default function ProductPage({ params }) {
           <div className="mx-auto p-6">
             {/* 오른쪽전체간격 */}
             <div className="space-y-8">
-              <h1 className="text-3xl font-bold">{product.name}</h1>
+              <h1 className="text-3xl font-bold ">{product.name}</h1>
               <p className="text-gray-400">{product.description}</p>
               <div className="flex items-center space-x-2">
                 <span className="text-2xl font-semibold">
@@ -49,11 +49,16 @@ export default function ProductPage({ params }) {
               </div>
               {/* 컬러와사이즈 (client side) */}
               <ColorAndSize colors={product.colors} sizes={product.sizes} />
-
-              <button className="w-full bg-primary text-white py-3 rounded-lg flex items-center justify-center">
-                <FaCartShopping className="mr-2" />
-                장바구니담기
-              </button>
+              <div className="flex space-x-2 w-52">
+                <button className="btn w-full text-black py-3 rounded-sm flex items-center justify-center">
+                  <FaCartShopping className="mr-2" />
+                  장바구니담기
+                </button>
+                <button className="btn w-full bg-blue-900 text-white py-3 rounded-sm flex items-center justify-center">
+                  바로구매
+                  <FaAngleRight />
+                </button>
+              </div>
             </div>
           </div>
         </div>

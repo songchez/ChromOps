@@ -8,7 +8,7 @@ export default function Collection() {
       <div className="container mx-auto">
         <div className="flex justify-between items-center">
           <h2 className="text-2xl font-bold mb-8 text-center">
-            <h3 className="text-xl font-bold text-left">BEST ITEMS</h3>
+            <p className="text-xl font-bold text-left">BEST ITEMS</p>
             가장 사랑받는 아이템
           </h2>
           <Link className="text-right text-zinc-300" href="/shop">
