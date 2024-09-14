@@ -2,20 +2,14 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import {
-  FaArrowDownLong,
-  FaArrowUpLong,
-  FaMinus,
-  FaPlus,
-  FaX,
-} from "react-icons/fa6";
+import { FaMinus, FaPlus, FaX } from "react-icons/fa6";
 import Link from "next/link";
 
 export default function ShoppingCart() {
   const [cartItems, setCartItems] = useState([]);
   const [orderSummary, setOrderSummary] = useState({
     subtotal: 0,
-    discount: 1000,
+    discount: 0,
     shoppingEstimate: 0,
     orderTotal: 0,
   });
@@ -34,12 +28,12 @@ export default function ShoppingCart() {
       0
     );
 
-    const shipping = 3000;
+    const shipping = 0;
     const orderTotal = total - orderSummary.discount + shipping;
 
     setOrderSummary({
       subtotal: total,
-      discount: 1000,
+      discount: 0,
       shoppingEstimate: shipping,
       orderTotal: orderTotal,
     });
@@ -97,7 +91,7 @@ export default function ShoppingCart() {
                   className="text-gray-500 m-4"
                   onClick={() => removeItem(index)}
                 >
-                  <FaX size={13} />
+                  <FaX size={11} />
                 </button>
                 <div className="flex gap-3 rounded-sm p-1 items-center border mx-4">
                   <button
@@ -160,7 +154,7 @@ export default function ShoppingCart() {
               </div>
             </div>
             <button className="w-full bg-blue-800 text-white py-2 rounded mt-4 hover:bg-indigo-500 transition duration-200">
-              Checkout
+              결제하기
             </button>
           </div>
         </div>
