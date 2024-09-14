@@ -74,7 +74,10 @@ export default function PerchaseActions({ product }) {
                 장바구니에 상품이 추가되었습니다!
               </h3>
               <form method="dialog" className="modal-backdrop">
-                <Link href="/cart" className="btn bg-blue-900 text-white">
+                <Link
+                  href="/cart"
+                  className="btn bg-blue-900 hover:bg-blue-600 text-white"
+                >
                   장바구니보러가기
                 </Link>
               </form>
@@ -105,6 +108,7 @@ const handleAddToCart = ({ product, quantity, size, color }) => {
     quantity: quantity,
     color: color,
     size: size,
+    slug: product.slug,
   };
   // 장바구니에 동일한 상품이 있는지 확인(컬러와 사이즈가 다르면 다른제품으로 취급)
   const existingItemIndex = existingCart.findIndex(

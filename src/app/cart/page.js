@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { FaX } from "react-icons/fa6";
+import Link from "next/link";
 
 export default function ShoppingCart() {
   const [cartItems, setCartItems] = useState([]);
@@ -67,13 +68,15 @@ export default function ShoppingCart() {
         <div className="flex-grow">
           {cartItems.map((item, index) => (
             <div key={index} className="flex items-center border-b py-4">
-              <Image
-                src={`/products/${item.id}/thumbnail_1.jpg`}
-                alt={item.name}
-                width={100}
-                height={100}
-                className="mr-4"
-              />
+              <Link href={`/shop/${item.slug}`}>
+                <Image
+                  src={`/products/${item.id}/thumbnail_1.jpg`}
+                  alt={item.name}
+                  width={100}
+                  height={100}
+                  className="mr-4"
+                />
+              </Link>
               <div className="flex-grow">
                 <h2 className="font-semibold">{item.name}</h2>
                 <p className="text-gray-600">
