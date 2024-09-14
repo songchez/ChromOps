@@ -2,7 +2,13 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { FaX } from "react-icons/fa6";
+import {
+  FaArrowDownLong,
+  FaArrowUpLong,
+  FaMinus,
+  FaPlus,
+  FaX,
+} from "react-icons/fa6";
 import Link from "next/link";
 
 export default function ShoppingCart() {
@@ -61,7 +67,7 @@ export default function ShoppingCart() {
   };
 
   return (
-    <div className="container mx-auto p-4 bg-slate-50 text-black">
+    <div className="mx-auto max-w-5xl p-4 bg-slate-50 text-black">
       <h1 className="text-2xl font-bold mb-4">장바구니</h1>
 
       <div className="flex flex-col md:flex-row gap-8">
@@ -86,24 +92,40 @@ export default function ShoppingCart() {
                   {item.price.toLocaleString("ko-KR")} 원
                 </p>
               </div>
-              <div className="flex items-center">
-                <select
-                  className="border rounded p-1 mr-2"
-                  value={item.quantity}
-                  onChange={(e) => updateQuantity(index, e.target.value)}
-                >
-                  {[...Array(10)].map((_, i) => (
-                    <option key={i} value={i + 1}>
-                      {i + 1}
-                    </option>
-                  ))}
-                </select>
+              <div className="flex flex-col items-end gap-7">
                 <button
-                  className="text-gray-500"
+                  className="text-gray-500 m-4"
                   onClick={() => removeItem(index)}
                 >
-                  <FaX size={20} />
+                  <FaX size={13} />
                 </button>
+                <div className="flex gap-3 rounded-sm p-1 items-center border mx-4">
+                  <button
+                    className="p-1"
+                    onClick={() =>
+                      updateQuantity(
+                        index,
+                        item.quantity - 1 < 1 ? 1 : item.quantity - 1
+                      )
+                    }
+                  >
+                    <FaMinus size={14} />
+                  </button>
+
+                  <span className="text-sm px-2">{item.quantity}</span>
+
+                  <button
+                    className="p-1"
+                    onClick={() =>
+                      updateQuantity(
+                        index,
+                        item.quantity + 1 > 10 ? 10 : item.quantity + 1
+                      )
+                    }
+                  >
+                    <FaPlus size={14} />
+                  </button>
+                </div>
               </div>
             </div>
           ))}
