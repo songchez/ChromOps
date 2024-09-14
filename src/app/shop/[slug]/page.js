@@ -2,10 +2,9 @@ import React from "react";
 import products from "@/data/products.json";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { FaAngleRight, FaCartShopping, FaStar } from "react-icons/fa6";
-import ColorAndSize from "@/components/productPage/ColorAndSize";
+import { FaStar } from "react-icons/fa6";
 import Carousel from "@/components/productPage/Carousel";
-import AddToCart from "@/components/productPage/AddToCart";
+import PerchaseActions from "@/components/productPage/PerchaseActions";
 
 export default function ProductPage({ params }) {
   const { slug } = params;
@@ -48,16 +47,8 @@ export default function ProductPage({ params }) {
                   </a>
                 </div>
               </div>
-              {/* 컬러와사이즈 (client side) */}
-              <ColorAndSize colors={product.colors} sizes={product.sizes} />
-
-              <div className="flex space-x-2 w-52">
-                <AddToCart product={product} />
-                <button className="btn w-full bg-blue-900 text-white py-3 rounded-sm flex items-center justify-center">
-                  바로구매
-                  <FaAngleRight />
-                </button>
-              </div>
+              {/* 구매액션 섹션(client side) */}
+              <PerchaseActions product={product} />
             </div>
           </div>
         </div>
