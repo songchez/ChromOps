@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import React, { useState } from "react";
 import { FaAngleRight, FaCartShopping } from "react-icons/fa6";
 
@@ -10,8 +11,9 @@ export default function PerchaseActions({ product }) {
     olive: "bg-olive",
     beige: "bg-beige",
   };
-  const [selectedColor, setSelectedColor] = useState("navy");
-  const [selectedSize, setSelectedSize] = useState("M");
+
+  const [selectedColor, setSelectedColor] = useState(product.colors[0]);
+  const [selectedSize, setSelectedSize] = useState(product.sizes[0]);
   return (
     <div>
       <div className="space-y-8">
@@ -67,11 +69,15 @@ export default function PerchaseActions({ product }) {
           </button>
           {/* Modal */}
           <dialog id="my_modal_2" className="modal">
-            <div className="modal-box">
+            <div className="modal-box flex flex-col gap-4">
               <h3 className="font-bold text-lg">
                 장바구니에 상품이 추가되었습니다!
               </h3>
-              <p className="py-4">장바구니보러가기 </p>
+              <form method="dialog" className="modal-backdrop">
+                <Link href="/cart" className="btn bg-blue-900 text-white">
+                  장바구니보러가기
+                </Link>
+              </form>
               <form method="dialog" className="modal-backdrop">
                 <button className="btn">닫기</button>
               </form>
@@ -100,9 +106,12 @@ const handleAddToCart = ({ product, quantity, size, color }) => {
     color: color,
     size: size,
   };
-  // 장바구니에 동일한 상품이 있는지 확인
+  // 장바구니에 동일한 상품이 있는지 확인(컬러와 사이즈가 다르면 다른제품으로 취급)
   const existingItemIndex = existingCart.findIndex(
-    (item) => item.id === newItem.id
+    (item) =>
+      item.id === newItem.id &&
+      item.color === newItem.color &&
+      item.size === newItem.size
   );
 
   if (existingItemIndex >= 0) {
@@ -117,7 +126,5 @@ const handleAddToCart = ({ product, quantity, size, color }) => {
   localStorage.setItem("cartItems", JSON.stringify(existingCart));
 
   // 모달열기
-  return () => {
-    document.getElementById("my_modal_2").showModal();
-  };
+  return document.getElementById("my_modal_2").showModal();
 };
