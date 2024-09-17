@@ -5,9 +5,22 @@ export default async function BlogPostPage({ params }) {
     `@/data/posts/${params.slug}.mdx`
   );
 
+  const typoTheme = `max-w-3xl p-3 prose prose-strong:text-blue-400 prose-hr:border-gray-300
+    dark:prose-invert
+    dark:prose-headings:text-white
+    dark:prose-p:text-white
+    dark:prose-h1:text-4xl
+    dark:prose-h1:text-blue-500
+    dark:prose-h1:decoration-fuchsia-600
+    dark:prose-h2:text-3xl
+    dark:prose-h3:text-2xl
+    dark:prose-h4:text-xl
+    dark:prose-h5:text-lg
+    dark:prose-h6:text-lg
+  `;
+
   return (
-    <div className="max-w-3xl p-3 prose prose-headings:mt-8 prose-p:text-white prose-headings:font-semibold prose-headings:text-white prose-h1:text-4xl prose-h2:text-3xl prose-h3:text-2xl prose-h4:text-xl prose-h5:text-lg prose-h6:text-lg dark:prose-headings:text-white">
-      {metadata.title}
+    <div className={typoTheme}>
       <Post />
     </div>
   );

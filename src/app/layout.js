@@ -1,9 +1,9 @@
-import { Gothic_A1 } from "next/font/google";
+import { Noto_Sans_KR } from "next/font/google";
 import Footer from "@/components/main/Footer";
 import Header from "@/components/main/Header";
 import "./globals.css";
 
-const gothic = Gothic_A1({ weight: ["500"], subsets: ["latin"] });
+const notoSans = Noto_Sans_KR({ weight: ["400"], subsets: ["latin"] });
 
 export const metadata = {
   title: "ChromOps",
@@ -13,7 +13,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="ko" theme={"black"}>
-      <body className={gothic.className}>
+      <body className={notoSans.className}>
         <div className="bg-slate-950 text-white min-h-screen">
           <Header />
           {children}

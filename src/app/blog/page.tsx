@@ -41,7 +41,7 @@ export default async function BlogPage() {
             >
               {post.title}
             </Link>
-            <p className="text-gray-600">{post.date}</p>
+            <p className="text-gray-600 text-sm">{post.date}</p>
           </li>
         ))}
       </ul>
