@@ -5,7 +5,9 @@ export default async function BlogPostPage({ params }) {
     `@/data/posts/${params.slug}.mdx`
   );
 
-  const typoTheme = `max-w-3xl p-3 prose prose-strong:text-blue-400 prose-hr:border-gray-300
+  const typoTheme = `max-w-3xl p-3 prose 
+    prose-strong:text-blue-400 
+    prose-hr:border-gray-300
     prose-invert
     prose-headings:text-white
     prose-p:text-white

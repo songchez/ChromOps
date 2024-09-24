@@ -1,6 +1,7 @@
 import { Noto_Sans_KR } from "next/font/google";
 import Footer from "@/components/main/Footer";
 import Header from "@/components/main/Header";
+import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 
 const notoSans = Noto_Sans_KR({ weight: ["400"], subsets: ["latin"] });
@@ -19,6 +20,7 @@ export default function RootLayout({ children }) {
           {children}
           <Footer />
         </div>
+        <Analytics />
       </body>
     </html>
   );
