@@ -25,4 +25,5 @@ model User {
   name    String?
   cart    Products[] @relation("UserCart") // 장바구니
   orderList Products[] @relation("UserOrderList") // 주문 및 결제 목록
+  createdAt     DateTime  @default(now())
 }
