@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { FaCartShopping, FaMagnifyingGlass, FaUser } from "react-icons/fa6";
+import NavUser from "./sessionNav/navUser";
 
 export default function Header() {
   return (
@@ -59,11 +60,7 @@ export default function Header() {
                   <FaCartShopping />
                 </a>
               </li>
-              <li>
-                <a href="/" className="hover:text-yellow-500 text-xl">
-                  <FaUser />
-                </a>
-              </li>
+              <NavUser />
             </ul>
           </nav>
         </div>

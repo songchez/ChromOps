@@ -15,7 +15,6 @@ export default function ShopPage() {
               alt={product.name}
               width={300}
               height={250}
-              layout="responsive"
             />
             <div className="p-1 bg-white text-primary-content md:p-4">
               <h3 className="text-sm md:text-md font-light mb-2">

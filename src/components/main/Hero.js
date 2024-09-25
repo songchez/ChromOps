@@ -9,7 +9,7 @@ export default function Hero() {
           src="/images/hero.png"
           alt="Tactical operations"
           layout="fill"
-          objectFit="cover"
+          className="object-cover"
         />
       </div>
       <div className="text-fuck relative z-10 text-left -inset-x-40">

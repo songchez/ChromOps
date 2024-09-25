@@ -1,0 +1,25 @@
+"use client";
+import { signIn, signOut, useSession } from "next-auth/react";
+import Link from "next/link";
+import { FaUser } from "react-icons/fa6";
+
+//nav중 세션의 영향을 받는 User 컴포넌트
+
+export default function NavUser() {
+  const { data: session } = useSession(); //세션 정보를 가져옴
+
+  return (
+    <li>
+      {session ? (
+        <button onClick={() => signOut()} className="text-lg">
+          <FaUser />
+        </button>
+      ) : (
+        <div className="flex space-x-4">
+          <button onClick={() => signIn()}>로그인</button>
+          <Link href={"/"}>회원가입</Link>
+        </div>
+      )}
+    </li>
+  );
+}
