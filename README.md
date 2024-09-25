@@ -18,7 +18,7 @@ Tailwind CSS
 - [ ] 리뷰페이지 만들고 구현하기 - 리뷰api 구현(veceldb와 연결(postgreSQL))
 - [ ] 깔쌈한 폰트 찾아서 적용시키기. 영어랑 한글 따로 가능?
 - [ ] 로그인과 세션구현. vercel의 postgreSQL이용,
-  - [ ] architecture구성 짜기. 그대로 구현해보기
+  - [x] architecture구성 짜기. 그대로 구현해보기
   - [ ] 세션전에 사항, 세션 후 사항 뭐가 다른지 기획
   - [ ] db구성 짜기
   - [ ] 로그인 페이지, 본인페이지

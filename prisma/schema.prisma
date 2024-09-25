@@ -1,0 +1,28 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_PRISMA_URL")
+}
+
+model Products {
+  id    String @id
+  color String
+  name  String
+  price Int
+  quantity Int
+  size  String
+  slug  String
+  usersCart   User[] @relation("UserCart")
+  usersOrder  User[] @relation("UserOrderList")
+}
+
+model User {
+  id      Int      @id @default(autoincrement())
+  email   String   @unique
+  name    String?
+  cart    Products[] @relation("UserCart") // 장바구니
+  orderList Products[] @relation("UserOrderList") // 주문 및 결제 목록
+}

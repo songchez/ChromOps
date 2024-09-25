@@ -11,14 +11,16 @@ export default function NavUser() {
   return (
     <li>
       {session ? (
-        <button onClick={() => signOut()} className="text-lg">
+        <div className="flex items-center space-x-4">
+          <Link href={"/mypage"} className="text-lg">
+            <FaUser />
+          </Link>
+          <button onClick={() => signOut()}>로그아웃</button>
+        </div>
+      ) : (
+        <button onClick={() => signIn()} className="text-lg">
           <FaUser />
         </button>
-      ) : (
-        <div className="flex space-x-4">
-          <button onClick={() => signIn()}>로그인</button>
-          <Link href={"/"}>회원가입</Link>
-        </div>
       )}
     </li>
   );
