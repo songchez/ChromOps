@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 interface SalesData {
   id: string;
@@ -11,49 +11,44 @@ interface SalesData {
   totalSales: number;
 }
 
-async function getSalesData(): Promise<SalesData[]> {
-  const response = await fetch("/api/admin/sales");
-  if (!response.ok) {
-    throw new Error("판매 데이터를 가져오는 데 실패했습니다.");
-  }
-  return response.json();
-}
-
 export default function AdminSalesPage() {
-  const [salesData, setSalesData] = useState<SalesData[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const { data: session, status } = useSession();
   const router = useRouter();
+  const [salesData, setSalesData] = useState<SalesData[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (status === "loading") return;
 
     if (!session || !session.user.isAdmin) {
       router.push("/login");
-      return;
+    } else {
+      fetchSalesData();
     }
-
-    const fetchSalesData = async () => {
-      try {
-        const data = await getSalesData();
-        setSalesData(data);
-      } catch (err) {
-        setError("판매 데이터를 불러오는 중 오류가 발생했습니다.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchSalesData();
   }, [session, status, router]);
 
-  if (isLoading) return <div>로딩 중...</div>;
-  if (error) return <div>오류: {error}</div>;
+  const fetchSalesData = async () => {
+    try {
+      const response = await fetch("/api/admin/sales");
+      if (!response.ok) {
+        throw new Error("Failed to fetch sales data");
+      }
+      const data = await response.json();
+      setSalesData(data);
+    } catch (error) {
+      console.error("Error fetching sales data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
-    <div>
-      <h1>관리자 판매 페이지</h1>
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-2xl font-bold mb-6">관리자 판매 페이지</h1>
       <SalesDataDisplay data={salesData} />
     </div>
   );
@@ -61,20 +56,22 @@ export default function AdminSalesPage() {
 
 function SalesDataDisplay({ data }: { data: SalesData[] }) {
   return (
-    <table>
+    <table className="w-full border-collapse border border-gray-300">
       <thead>
-        <tr>
-          <th>제품명</th>
-          <th>판매 수량</th>
-          <th>총 판매액</th>
+        <tr className="bg-gray-100">
+          <th className="border border-gray-300 p-2">제품명</th>
+          <th className="border border-gray-300 p-2">판매 수량</th>
+          <th className="border border-gray-300 p-2">총 판매액</th>
         </tr>
       </thead>
       <tbody>
         {data.map((item) => (
           <tr key={item.id}>
-            <td>{item.productName}</td>
-            <td>{item.quantity}</td>
-            <td>{item.totalSales.toLocaleString()}원</td>
+            <td className="border border-gray-300 p-2">{item.productName}</td>
+            <td className="border border-gray-300 p-2">{item.quantity}</td>
+            <td className="border border-gray-300 p-2">
+              {item.totalSales.toLocaleString()}원
+            </td>
           </tr>
         ))}
       </tbody>
