@@ -1,4 +1,4 @@
-import NextAuth, { DefaultUser } from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
@@ -8,21 +8,17 @@ import bcrypt from "bcryptjs";
 const prisma = new PrismaClient();
 
 declare module "next-auth" {
-  interface User extends DefaultUser {
+  interface User {
     isAdmin: boolean;
   }
   interface Session {
-    user: User;
+    user: User & {
+      isAdmin: boolean;
+    };
   }
 }
 
-declare module "next-auth/jwt" {
-  interface JWT {
-    isAdmin: boolean;
-  }
-}
-
-const handler = NextAuth({
+export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     CredentialsProvider({
@@ -47,16 +43,10 @@ const handler = NextAuth({
           },
         });
 
-        if (!user) {
-          return null;
-        }
-
-        const isPasswordValid = await bcrypt.compare(
-          credentials.password,
-          user.password
-        );
-
-        if (!isPasswordValid) {
+        if (
+          !user ||
+          !(await bcrypt.compare(credentials.password, user.password))
+        ) {
           return null;
         }
 
@@ -74,15 +64,9 @@ const handler = NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.isAdmin = user.isAdmin;
-      }
-      return token;
-    },
-    async session({ session, token }) {
+    async session({ session, user }) {
       if (session.user) {
-        session.user.isAdmin = token.isAdmin;
+        session.user.isAdmin = user.isAdmin;
       }
       return session;
     },
@@ -91,6 +75,8 @@ const handler = NextAuth({
     signIn: "/login",
   },
   secret: process.env.NEXTAUTH_SECRET,
-});
+};
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
