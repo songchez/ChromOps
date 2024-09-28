@@ -29,7 +29,6 @@ export default function Collection() {
                       alt={product.name}
                       width={300}
                       height={250}
-                      layout="responsive"
                     />
                     <div className="p-4">
                       <h3 className="text-md font-bold mb-2">{product.name}</h3>

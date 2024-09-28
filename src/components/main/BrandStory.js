@@ -9,9 +9,8 @@ export default function BrandStory() {
             <Image
               src="/images/operation-chromite.png"
               alt="OPERATION CHROMITE"
-              width={300}
-              height={300}
-              layout="responsive"
+              width={500}
+              height={500}
             />
           </div>
           <div className="md:w-1/3 md:pl-8">

@@ -3,7 +3,7 @@ import Footer from "@/components/main/Footer";
 import Header from "@/components/main/Header";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
-import AuthContext from "@/context/AuthContext";
+import { SessionProvider } from "next-auth/react";
 
 const notoSans = Noto_Sans_KR({ weight: ["400"], subsets: ["latin"] });
 
@@ -12,17 +12,17 @@ export const metadata = {
   description: "역전, 승리, 크로몹스",
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ session, children }) {
   return (
-    <html lang="ko" theme={"black"}>
+    <html lang="ko">
       <body className={notoSans.className}>
-        <AuthContext>
+        <SessionProvider session={session}>
           <div className="bg-slate-950 text-white min-h-screen">
             <Header />
             {children}
             <Footer />
           </div>
-        </AuthContext>
+        </SessionProvider>
         <Analytics />
       </body>
     </html>

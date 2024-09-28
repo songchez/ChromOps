@@ -1,24 +1,17 @@
-"use client";
-
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { authOptions } from "../api/auth/[...nextauth]/route";
+import { getServerSession } from "next-auth/next";
+import { redirect } from "next/navigation";
 import Link from "next/link";
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { data: session, status } = useSession();
-  const router = useRouter();
-
-  if (status === "loading") {
-    return <div>Loading...</div>;
-  }
+  const session = await getServerSession(authOptions);
 
   if (!session || !session.user.isAdmin) {
-    router.push("/login");
-    return null;
+    redirect("/login");
   }
 
   return (

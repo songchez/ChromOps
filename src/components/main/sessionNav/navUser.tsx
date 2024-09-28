@@ -1,5 +1,5 @@
 "use client";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { FaUser } from "react-icons/fa6";
 
@@ -12,15 +12,15 @@ export default function NavUser() {
     <li>
       {session ? (
         <div className="flex items-center space-x-4">
-          <Link href={"/mypage"} className="text-lg">
+          <Link href="/mypage" className="text-lg">
             <FaUser />
           </Link>
           <button onClick={() => signOut()}>로그아웃</button>
         </div>
       ) : (
-        <button onClick={() => signIn()} className="text-lg">
+        <Link href="/login" className="text-lg">
           <FaUser />
-        </button>
+        </Link>
       )}
     </li>
   );

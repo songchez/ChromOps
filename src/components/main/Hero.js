@@ -8,7 +8,7 @@ export default function Hero() {
         <Image
           src="/images/hero.png"
           alt="Tactical operations"
-          layout="fill"
+          fill={true}
           className="object-cover"
         />
       </div>
