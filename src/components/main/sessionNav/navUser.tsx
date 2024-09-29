@@ -16,13 +16,15 @@ export default function NavUser() {
     <li>
       {session ? (
         <div className="flex items-center space-x-4">
-          <Link href="/mypage" className="text-lg">
+          <Link href="/mypage" className="text-lg hover:text-yellow-500">
             <FaUser />
           </Link>
-          <button onClick={() => signOut()}>로그아웃</button>
+          <button onClick={() => signOut()} className="hover:text-yellow-500">
+            로그아웃
+          </button>
         </div>
       ) : (
-        <Link href="/login" className="text-lg">
+        <Link href="/login" className="text-lg hover:text-yellow-500">
           <FaUser />
         </Link>
       )}
