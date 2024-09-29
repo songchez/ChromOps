@@ -5,7 +5,7 @@ export default auth((req) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
 
-  const protectedPaths = ["/mypage", "/checkout"];
+  const protectedPaths = ["/mypage", "/cart/checkout"];
   const isProtectedPath = protectedPaths.some((path) =>
     nextUrl.pathname.startsWith(path)
   );

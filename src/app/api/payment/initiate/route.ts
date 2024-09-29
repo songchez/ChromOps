@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
+import { OrderService } from "@/services/OrderService";
 
 export async function POST(request: Request) {
   const session = await auth();
@@ -7,12 +8,16 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { orderName, totalAmount } = await request.json();
+  const { orderName, totalAmount, cartItems } = await request.json();
+
+  // 주문 생성
+  const order = await OrderService.createOrder(session.user.id, cartItems);
 
   const paymentData = {
     storeId: process.env.PORTONE_STORE_ID,
     channelKey: process.env.PORTONE_KAKAO_CHANNEL_KEY,
     paymentId: `payment-${crypto.randomUUID()}`,
+    orderId: order.id, // 생성된 주문의 ID
     orderName,
     totalAmount,
     currency: "CURRENCY_KRW",

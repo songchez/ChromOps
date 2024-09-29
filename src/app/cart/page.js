@@ -153,9 +153,12 @@ export default function ShoppingCart() {
                 <span>{orderSummary.orderTotal.toLocaleString("ko-KR")}원</span>
               </div>
             </div>
-            <button className="w-full bg-blue-800 text-white py-2 rounded mt-4 hover:bg-indigo-500 transition duration-200">
+            <Link
+              href="/cart/checkout"
+              className="btn w-full bg-blue-800 text-white py-2 rounded mt-4 hover:bg-indigo-500 transition duration-200"
+            >
               결제하기
-            </button>
+            </Link>
           </div>
         </div>
       </div>
