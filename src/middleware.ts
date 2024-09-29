@@ -1,21 +1,21 @@
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-import { getToken } from "next-auth/jwt";
+import { auth } from "@/auth";
 
-export async function middleware(request: NextRequest) {
-  const token = await getToken({
-    req: request,
-    secret: process.env.NEXTAUTH_SECRET,
-  });
+export default auth((req) => {
+  const { nextUrl } = req;
+  const isLoggedIn = !!req.auth;
 
-  if (request.nextUrl.pathname.startsWith("/admin")) {
-    if (!token || !token.isAdmin) {
-      return NextResponse.redirect(new URL("/login", request.url));
-    }
+  const protectedPaths = ["/mypage", "/checkout"];
+  const isProtectedPath = protectedPaths.some((path) =>
+    nextUrl.pathname.startsWith(path)
+  );
+
+  if (isProtectedPath && !isLoggedIn) {
+    return NextResponse.redirect(new URL("/login", nextUrl));
   }
 
   return NextResponse.next();
-}
+});
 
 export const config = {
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
