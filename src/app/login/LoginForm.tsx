@@ -1,17 +1,31 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const errorType = searchParams.get("error");
+    const emailParam = searchParams.get("email");
+    if (errorType === "AccountExists" && emailParam) {
+      setError(
+        `${emailParam} 주소로 이미 가입된 계정이 존재합니다. 기존 계정으로 로그인해 주세요.`
+      );
+      setEmail(emailParam);
+    }
+  }, [searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
     const result = await signIn("credentials", {
       email,
       password,
@@ -19,7 +33,7 @@ export default function LoginForm() {
     });
 
     if (result?.error) {
-      console.error(result.error);
+      setError("이메일 또는 비밀번호가 올바르지 않습니다.");
     } else {
       router.push("/");
       router.refresh();
@@ -34,6 +48,11 @@ export default function LoginForm() {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+          {error && (
+            <div className="mb-4 text-sm text-red-600 bg-red-100 p-3 rounded">
+              {error}
+            </div>
+          )}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label

@@ -27,6 +27,19 @@ export default {
       else if (new URL(url).origin === baseUrl) return url;
       return baseUrl;
     },
+    async signIn({ user, account, profile }) {
+      if (account?.provider === "google") {
+        const existingUser = await prisma.user.findUnique({
+          where: { email: user.email },
+        });
+
+        if (existingUser) {
+          // 이미 존재하는 계정이 있는 경우
+          return `/login?error=AccountExists&email=${user.email}`;
+        }
+      }
+      return true;
+    },
   },
   pages: {
     signIn: "/login",
