@@ -1,5 +1,7 @@
 import { prisma } from "@/lib/prisma";
 
+//서버로 들어온 결제 데이터와 실제 결제데이터 비교하는 함수
+
 export class OrderService {
   static async getOrderData(orderId: string) {
     try {
@@ -46,7 +48,7 @@ export class OrderService {
     try {
       const updatedOrder = await prisma.order.update({
         where: { id: orderId },
-        data: { status: status as any },
+        data: { status: status },
       });
 
       return updatedOrder;
