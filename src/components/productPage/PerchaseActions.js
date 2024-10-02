@@ -86,10 +86,21 @@ export default function PerchaseActions({ product }) {
               </form>
             </div>
           </dialog>
-          <button className="btn w-full bg-blue-900 text-white py-3 rounded-sm flex items-center justify-center">
+          <Link
+            href="/cart"
+            onClick={() => {
+              handleAddToCart({
+                product: product,
+                quantity: 1,
+                size: selectedSize,
+                color: selectedColor,
+              });
+            }}
+            className="btn w-full bg-blue-900 text-white py-3 rounded-sm flex items-center justify-center"
+          >
             바로구매
             <FaAngleRight />
-          </button>
+          </Link>
         </div>
       </div>
     </div>

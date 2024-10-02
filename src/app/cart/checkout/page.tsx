@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import * as PortOne from "@portone/browser-sdk/v2";
 import Script from "next/script";
+import React from "react";
 
 interface CartItem {
   id: string;
@@ -35,7 +36,7 @@ const CheckoutPage = () => {
   const [paymentMethod, setPaymentMethod] = useState("KAKAOPAY");
   const [recipient, setRecipient] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [deliveryNote, setDeliveryNote] = useState("");
+  const [deliveryNote, setDeliveryNote] = useState("문앞에 놔주세요");
   const router = useRouter();
   const { data: session, status } = useSession();
 
@@ -138,7 +139,7 @@ const CheckoutPage = () => {
     <>
       <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" />
       <div className="container mx-auto p-4 max-w-4xl bg-white text-gray-800">
-        <h1 className="text-xl font-bold mb-6 text-center">결제 페이지</h1>
+        <h1 className="text-xl font-bold mb-6 text-center">Checkout</h1>
         <div className="flex flex-col md:flex-row gap-6">
           <div className="flex-1 flex flex-col">
             <div className="bg-gray-100 p-6 rounded-sm mb-6 flex-grow">
@@ -153,11 +154,21 @@ const CheckoutPage = () => {
                 />
                 <input
                   type="tel"
-                  placeholder="전화번호"
+                  placeholder="휴대폰 번호 (예: 01012345678)"
                   className="input input-bordered w-full rounded-sm mb-2"
                   value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  onChange={(e) => {
+                    const input = e.target.value.replace(/\D/g, "");
+                    const formattedNumber = input.replace(
+                      /(\d{3})(\d{4})(\d{4})/,
+                      "$1-$2-$3"
+                    );
+                    setPhoneNumber(formattedNumber);
+                  }}
                 />
+              </div>
+              <h3 className="text-md font-semibold mb-2">주소</h3>
+              <div className="mb-4">
                 <div className="flex gap-2 mb-2">
                   <input
                     type="text"
@@ -187,6 +198,9 @@ const CheckoutPage = () => {
                   value={detailAddress}
                   onChange={(e) => setDetailAddress(e.target.value)}
                 />
+              </div>
+              <h3 className="text-md font-semibold mb-2">배송시 유의사항</h3>
+              <div className="mb-4">
                 <textarea
                   placeholder="배송시 유의사항"
                   className="textarea textarea-bordered w-full rounded-sm"
