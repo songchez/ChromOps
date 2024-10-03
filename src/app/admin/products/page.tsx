@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { prisma } from "@/lib/prisma";
 
 export default function ProductManagement() {
   const [name, setName] = useState("");

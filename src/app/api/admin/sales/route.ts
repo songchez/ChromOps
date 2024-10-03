@@ -1,13 +1,24 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { prisma } from "@/lib/prisma";
+import { auth } from "@/auth";
+import prisma from "@/lib/prisma";
 
 export async function GET() {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
 
-  if (!session || !session.user.isAdmin) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  // session이 null이 아니고, user 객체가 존재하는지 확인
+  if (!session || !session.user) {
+    return NextResponse.json(
+      { error: "인증되지 않은 사용자입니다." },
+      { status: 401 }
+    );
+  }
+
+  // user 객체에 isAdmin 속성이 있는지 타입 가드를 사용하여 확인
+  if (!("isAdmin" in session.user) || !session.user.isAdmin) {
+    return NextResponse.json(
+      { error: "관리자 권한이 없습니다." },
+      { status: 403 }
+    );
   }
 
   try {
@@ -44,10 +55,9 @@ export async function GET() {
 
     return NextResponse.json(salesData);
   } catch (error) {
-    console.error("Error fetching sales data:", error);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
+    console.error("판매 데이터 조회 중 오류 발생:", error);
+    return NextResponse.json({ error: "서버 내부 오류" }, { status: 500 });
+  } finally {
+    await prisma.$disconnect();
   }
 }

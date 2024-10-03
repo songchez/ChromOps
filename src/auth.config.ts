@@ -1,10 +1,10 @@
-import type { NextAuthConfig } from "next-auth";
+import { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 import bcrypt from "bcryptjs";
-import { prisma } from "@/lib/prisma";
+import prisma from "@/lib/prisma";
 
-export default {
+export const authConfig = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {

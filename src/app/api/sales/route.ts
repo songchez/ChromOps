@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import prisma from "@/lib/prisma";
 
 export async function GET() {
   try {
@@ -34,5 +34,7 @@ export async function GET() {
       { error: "판매 데이터를 가져오는데 실패했습니다." },
       { status: 500 }
     );
+  } finally {
+    await prisma.$disconnect();
   }
 }

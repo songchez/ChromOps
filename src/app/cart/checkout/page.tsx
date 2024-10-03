@@ -1,12 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import * as PortOne from "@portone/browser-sdk/v2";
+import { ShippingForm } from "@/components/checkout/ShippingForm";
+import { PaymentMethodSelector } from "@/components/checkout/PaymentMethodSelector";
+import { OrderSummary } from "@/components/checkout/OrderSummary";
 import Script from "next/script";
-import React from "react";
 
+// 장바구니 아이템 타입 정의
 interface CartItem {
   id: string;
   name: string;
@@ -14,18 +17,21 @@ interface CartItem {
   quantity: number;
 }
 
+// 주소 타입 정의
 interface Address {
   address: string;
   zonecode: string;
 }
 
+// 전역 window 객체에 daum 속성 추가
 declare global {
   interface Window {
     daum: any;
   }
 }
 
-const CheckoutPage = () => {
+const CheckoutPage: React.FC = () => {
+  // 상태 관리
   const [isLoading, setIsLoading] = useState(false);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [address, setAddress] = useState<Address>({
@@ -37,9 +43,11 @@ const CheckoutPage = () => {
   const [recipient, setRecipient] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [deliveryNote, setDeliveryNote] = useState("문앞에 놔주세요");
+
   const router = useRouter();
   const { data: session, status } = useSession();
 
+  // 컴포넌트 마운트 시 장바구니 아이템 로드
   useEffect(() => {
     const cartData = localStorage.getItem("cartItems");
     if (cartData) {
@@ -47,16 +55,19 @@ const CheckoutPage = () => {
     }
   }, []);
 
+  // 주문명 생성 함수
   const getOrderName = (items: CartItem[]): string => {
     if (items.length === 0) return "주문 없음";
     if (items.length === 1) return items[0].name;
     return `${items[0].name} 외 ${items.length - 1}개`;
   };
 
+  // 총 주문 금액 계산 함수
   const getTotalAmount = (items: CartItem[]): number => {
     return items.reduce((total, item) => total + item.price * item.quantity, 0);
   };
 
+  // 주소 검색 핸들러
   const handleAddressSearch = () => {
     new window.daum.Postcode({
       oncomplete: function (data: Address) {
@@ -65,6 +76,7 @@ const CheckoutPage = () => {
     }).open();
   };
 
+  // 결제 처리 함수
   const handlePayment = async () => {
     if (status !== "authenticated" || !session?.user) {
       console.error("사용자가 인증되지 않았습니다.");
@@ -76,42 +88,53 @@ const CheckoutPage = () => {
       const orderName = getOrderName(cartItems);
       const totalAmount = getTotalAmount(cartItems);
 
-      const paymentDataResponse = await fetch("/api/payment/initiate", {
+      const orderData = {
+        orderName,
+        totalAmount,
+        cartItems,
+        address: { ...address, detailAddress },
+        paymentMethod,
+        recipient,
+        phoneNumber,
+        deliveryNote,
+      };
+
+      // 결제 초기화 (서버 측 API 호출)
+      const response = await fetch("/api/payment/initiate", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          orderName,
-          totalAmount,
-          cartItems,
-          address: { ...address, detailAddress },
-          paymentMethod,
-        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderData),
       });
 
-      if (!paymentDataResponse.ok) {
+      if (!response.ok) {
         throw new Error("결제 초기화 실패");
       }
 
-      const paymentData = await paymentDataResponse.json();
+      const { paymentData, orderId } = await response.json();
 
-      const response = await PortOne.requestPayment(paymentData);
+      // 포트원 결제 요청
+      const portOneResponse = await PortOne.requestPayment(paymentData);
 
-      if (response.code != null) {
-        console.error("결제 오류:", response.message);
+      if (portOneResponse.code != null) {
+        console.error("결제 오류:", portOneResponse.message);
         router.push("/cart/checkout/fail");
       } else {
-        console.log("결제 성공:", response);
-        const notified = await fetch("/api/payment/complete", {
+        console.log("결제 성공:", portOneResponse);
+        // 결제 완료 처리 (서버 측 API 호출)
+        const completeResponse = await fetch("/api/payment/complete", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify({
-            paymentId: response.paymentId,
-            userId: session.user.id,
-            orderId: paymentData.orderId,
+            paymentId: portOneResponse.paymentId,
+            orderId: orderId,
           }),
         });
 
-        if (notified.ok) {
+        if (completeResponse.ok) {
           localStorage.removeItem("cartItems");
           router.push("/cart/checkout/success");
         } else {
@@ -128,149 +151,50 @@ const CheckoutPage = () => {
   };
 
   if (status === "loading") {
-    return (
-      <div className="flex justify-center items-center h-screen bg-white">
-        <span className="loading loading-spinner loading-lg text-primary"></span>
-      </div>
-    );
+    return <span className="loading loading-spinner loading-sm"></span>;
   }
 
   return (
     <>
-      <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" />
+      <Script
+        src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
+        strategy="lazyOnload"
+      />
       <div className="container mx-auto p-4 max-w-4xl bg-white text-gray-800">
         <h1 className="text-xl font-bold mb-6 text-center">Checkout</h1>
         <div className="flex flex-col md:flex-row gap-6">
           <div className="flex-1 flex flex-col">
-            <div className="bg-gray-100 p-6 rounded-sm mb-6 flex-grow">
-              <h2 className="text-xl font-semibold mb-4">배송 정보</h2>
-              <div className="mb-4">
-                <input
-                  type="text"
-                  placeholder="받는 사람"
-                  className="input input-bordered w-full rounded-sm mb-2"
-                  value={recipient}
-                  onChange={(e) => setRecipient(e.target.value)}
-                />
-                <input
-                  type="tel"
-                  placeholder="휴대폰 번호 (예: 01012345678)"
-                  className="input input-bordered w-full rounded-sm mb-2"
-                  value={phoneNumber}
-                  onChange={(e) => {
-                    const input = e.target.value.replace(/\D/g, "");
-                    const formattedNumber = input.replace(
-                      /(\d{3})(\d{4})(\d{4})/,
-                      "$1-$2-$3"
-                    );
-                    setPhoneNumber(formattedNumber);
-                  }}
-                />
-              </div>
-              <h3 className="text-md font-semibold mb-2">주소</h3>
-              <div className="mb-4">
-                <div className="flex gap-2 mb-2">
-                  <input
-                    type="text"
-                    placeholder="주소"
-                    className="input input-bordered flex-grow rounded-sm"
-                    value={address.address}
-                    readOnly
-                  />
-                  <button
-                    onClick={handleAddressSearch}
-                    className="btn bg-blue-700 text-white rounded-sm"
-                  >
-                    주소 검색
-                  </button>
-                </div>
-                <input
-                  type="text"
-                  placeholder="우편번호"
-                  className="input input-bordered w-full rounded-sm mb-2"
-                  value={address.zonecode}
-                  readOnly
-                />
-                <input
-                  type="text"
-                  placeholder="상세주소"
-                  className="input input-bordered w-full rounded-sm mb-2"
-                  value={detailAddress}
-                  onChange={(e) => setDetailAddress(e.target.value)}
-                />
-              </div>
-              <h3 className="text-md font-semibold mb-2">배송시 유의사항</h3>
-              <div className="mb-4">
-                <textarea
-                  placeholder="배송시 유의사항"
-                  className="textarea textarea-bordered w-full rounded-sm"
-                  value={deliveryNote}
-                  onChange={(e) => setDeliveryNote(e.target.value)}
-                ></textarea>
-              </div>
-            </div>
-            <div className="bg-gray-100 p-6 rounded-sm mb-6">
-              <h2 className="text-xl font-semibold mb-4">결제 방식</h2>
-              <select
-                className="select select-bordered w-full rounded-sm"
-                value={paymentMethod}
-                onChange={(e) => setPaymentMethod(e.target.value)}
-              >
-                <option value="KAKAOPAY">카카오페이</option>
-                <option value="CARD">카드결제</option>
-              </select>
-            </div>
+            <ShippingForm
+              recipient={recipient}
+              setRecipient={setRecipient}
+              phoneNumber={phoneNumber}
+              setPhoneNumber={setPhoneNumber}
+              address={address}
+              detailAddress={detailAddress}
+              setDetailAddress={setDetailAddress}
+              handleAddressSearch={handleAddressSearch}
+              deliveryNote={deliveryNote}
+              setDeliveryNote={setDeliveryNote}
+            />
+            <PaymentMethodSelector
+              paymentMethod={paymentMethod}
+              setPaymentMethod={setPaymentMethod}
+            />
           </div>
-          <div className="flex-1">
-            <div className="bg-gray-100 p-6 rounded-sm">
-              <h2 className="text-xl font-semibold mb-4">주문 내역</h2>
-              <div className="overflow-x-auto">
-                <table className="table w-full">
-                  <thead>
-                    <tr>
-                      <th className="text-left">상품명</th>
-                      <th className="text-right">수량</th>
-                      <th className="text-right">가격</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {cartItems.map((item) => (
-                      <tr key={item.id}>
-                        <td className="text-left">{item.name}</td>
-                        <td className="text-right">{item.quantity}</td>
-                        <td className="text-right">
-                          {(item.price * item.quantity).toLocaleString("ko-KR")}
-                          원
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              <div className="divider"></div>
-              <div className="text-right pb-4">
-                <p className="text-xl font-bold">
-                  총 금액: {getTotalAmount(cartItems).toLocaleString("ko-KR")}원
-                </p>
-              </div>
-              <button
-                onClick={handlePayment}
-                disabled={
-                  isLoading ||
-                  cartItems.length === 0 ||
-                  !address.address ||
-                  !detailAddress ||
-                  !recipient ||
-                  !phoneNumber
-                }
-                className={`btn bg-blue-700 text-white w-full rounded-sm ${
-                  isLoading ? "loading" : ""
-                }`}
-              >
-                {isLoading ? "처리 중..." : "결제하기"}
-              </button>
-            </div>
-          </div>
+          <OrderSummary
+            cartItems={cartItems}
+            getTotalAmount={getTotalAmount}
+            handlePayment={handlePayment}
+            isLoading={isLoading}
+            isDisabled={
+              isLoading ||
+              cartItems.length === 0 ||
+              !address.address ||
+              !detailAddress ||
+              !recipient ||
+              !phoneNumber
+            }
+          />
         </div>
       </div>
     </>

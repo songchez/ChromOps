@@ -1,13 +1,21 @@
 import { NextResponse } from "next/server";
-import { OrderService } from "@/services/OrderService";
+import prisma from "@/lib/prisma";
+import { auth } from "@/auth";
 
 const PORTONE_API_SECRET = process.env.PORTONE_API_SECRET;
 
-export async function POST(request: Request) {
-  try {
-    const { paymentId, orderId } = await request.json();
+export async function POST(req: Request) {
+  const session = await auth();
+  if (!session?.user) {
+    return NextResponse.json(
+      { error: "인증되지 않은 사용자입니다." },
+      { status: 401 }
+    );
+  }
 
-    // 1. 포트원 결제내역 단건조회 API 호출
+  const { paymentId, orderId } = await req.json();
+
+  try {
     const paymentResponse = await fetch(
       `https://api.portone.io/payments/${encodeURIComponent(paymentId)}`,
       {
@@ -21,43 +29,46 @@ export async function POST(request: Request) {
 
     const payment = await paymentResponse.json();
 
-    // 2. 고객사 내부 주문 데이터의 가격과 실제 지불된 금액을 비교합니다.
-    const orderData = await OrderService.getOrderData(orderId);
+    const order = await prisma.order.findUnique({
+      where: { id: orderId },
+      include: { items: true },
+    });
 
-    if (orderData.amount === payment.amount.total) {
+    if (!order) {
+      throw new Error("주문을 찾을 수 없습니다");
+    }
+
+    if (order.totalAmount === payment.amount.total) {
       switch (payment.status) {
         case "VIRTUAL_ACCOUNT_ISSUED": {
-          const paymentMethod = payment.paymentMethod;
-          await OrderService.updateOrderStatus(
-            orderId,
-            "VIRTUAL_ACCOUNT_ISSUED"
-          );
-          return NextResponse.json({
-            status: "virtual_account_issued",
-            paymentMethod,
+          await prisma.order.update({
+            where: { id: orderId },
+            data: { status: "VIRTUAL_ACCOUNT_ISSUED" },
           });
+          break;
         }
         case "PAID": {
-          await OrderService.updateOrderStatus(orderId, "PAID");
-          return NextResponse.json({ status: "paid" });
-        }
-        default: {
-          return NextResponse.json({ status: "unknown" });
+          await prisma.order.update({
+            where: { id: orderId },
+            data: { status: "PAID" },
+          });
+          break;
         }
       }
+      return NextResponse.json({ success: true });
     } else {
-      // 결제 금액이 불일치하여 위/변조 시도가 의심됩니다.
       return NextResponse.json(
-        { error: "Payment amount mismatch" },
+        { error: "결제 금액이 불일치합니다." },
         { status: 400 }
       );
     }
-  } catch (e) {
-    // 결제 검증에 실패했습니다.
-    console.error("Payment verification failed:", e);
+  } catch (error) {
+    console.error("Payment verification error:", error);
     return NextResponse.json(
-      { error: "Payment verification failed" },
-      { status: 400 }
+      { error: "결제 검증 중 오류가 발생했습니다." },
+      { status: 500 }
     );
+  } finally {
+    await prisma.$disconnect();
   }
 }

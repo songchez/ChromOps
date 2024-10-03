@@ -9,7 +9,7 @@ export default function NavUser() {
   const { data: session, status } = useSession(); //세션 정보를 가져옴
 
   if (status === "loading") {
-    return <li>Loading...</li>;
+    return <span className="loading loading-spinner loading-sm"></span>;
   }
 
   return (

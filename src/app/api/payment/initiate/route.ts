@@ -1,39 +1,75 @@
 import { NextResponse } from "next/server";
+import prisma from "@/lib/prisma";
 import { auth } from "@/auth";
-import { OrderService } from "@/services/OrderService";
 
-export async function POST(request: Request) {
+export async function POST(req: Request) {
   const session = await auth();
-  if (!session || !session.user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (!session?.user) {
+    return NextResponse.json(
+      { error: "인증되지 않은 사용자입니다." },
+      { status: 401 }
+    );
   }
 
-  const { orderName, totalAmount, cartItems } = await request.json();
-
-  // 주문 생성
-  const order = await OrderService.createOrder(session.user.id, cartItems);
-
-  const paymentData = {
-    storeId: process.env.PORTONE_STORE_ID,
-    channelKey: process.env.PORTONE_KAKAO_CHANNEL_KEY,
-    paymentId: `payment-${crypto.randomUUID()}`,
-    orderId: order.id, // 생성된 주문의 ID
+  const {
     orderName,
     totalAmount,
-    currency: "CURRENCY_KRW",
-    payMethod: "CARD",
-    customer: {
-      customerId: session.user.id || "guest",
-      fullName: session.user.name || "게스트",
-      email: session.user.email || "guest@example.com",
-      zipcode: "06018",
-    },
-    windowType: {
-      pc: "IFRAME",
-      mobile: "REDIRECTION",
-    },
-    redirectUrl: `${process.env.NEXTAUTH_URL}/cart/checkout/redirect`,
-  };
+    cartItems,
+    address,
+    paymentMethod,
+    recipient,
+    phoneNumber,
+    deliveryNote,
+  } = await req.json();
 
-  return NextResponse.json(paymentData);
+  try {
+    const order = await prisma.order.create({
+      data: {
+        userId: session.user.id,
+        status: "PAYMENT_WAITING",
+        totalAmount,
+        shippingAddress: `${address.address} ${address.detailAddress} ${address.zonecode}`,
+        paymentMethod,
+        recipientName: recipient,
+        phoneNumber,
+        deliveryNote,
+        items: {
+          create: cartItems.map((item) => ({
+            productId: item.id,
+            quantity: item.quantity,
+            price: item.price,
+          })),
+        },
+      },
+    });
+
+    const paymentData = {
+      storeId: process.env.PORTONE_STORE_ID,
+      channelKey: process.env.PORTONE_CHANNEL_KEY,
+      paymentId: `payment-${order.id}`,
+      orderName,
+      totalAmount,
+      currency: "CURRENCY_KRW",
+      payMethod: paymentMethod,
+      customer: {
+        customerId: session.user.id,
+        name: recipient,
+        phoneNumber,
+        address: {
+          addressLine1: `${address.address} ${address.detailAddress}`,
+          postcode: address.zonecode,
+        },
+      },
+    };
+
+    return NextResponse.json({ success: true, paymentData, orderId: order.id });
+  } catch (error) {
+    console.error("Order creation error:", error);
+    return NextResponse.json(
+      { error: "주문 처리 중 오류가 발생했습니다." },
+      { status: 500 }
+    );
+  } finally {
+    await prisma.$disconnect();
+  }
 }

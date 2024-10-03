@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import prisma from "@/lib/prisma";
 
 export async function POST(request: Request) {
   const formData = await request.formData();
@@ -34,5 +34,7 @@ export async function POST(request: Request) {
       { error: "상품 등록에 실패했습니다." },
       { status: 500 }
     );
+  } finally {
+    await prisma.$disconnect();
   }
 }
