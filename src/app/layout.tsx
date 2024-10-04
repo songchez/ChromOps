@@ -3,7 +3,7 @@ import Footer from "@/components/main/Footer";
 import Header from "@/components/main/Header";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
-import { Providers } from "@/components/Providers";
+import { Providers } from "@/components/nextauth/Providers";
 
 const notoSans = Noto_Sans_KR({ weight: ["400"], subsets: ["latin"] });
 

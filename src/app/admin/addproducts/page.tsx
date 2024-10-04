@@ -19,7 +19,7 @@ export default function ProductManagement() {
       if (mainImage) formData.append("mainImage", mainImage);
       detailImages.forEach((image) => formData.append("detailImages", image));
 
-      const response = await fetch("/api/products", {
+      const response = await fetch("/api/admin/addproducts", {
         method: "POST",
         body: formData,
       });
@@ -37,7 +37,7 @@ export default function ProductManagement() {
   };
 
   return (
-    <div>
+    <div className="text-zinc-950">
       <h2 className="text-2xl font-semibold mb-4">상품 등록</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>

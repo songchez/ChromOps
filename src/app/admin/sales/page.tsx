@@ -18,13 +18,7 @@ export default function AdminSalesPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (status === "loading") return;
-
-    if (!session || !session.user.isAdmin) {
-      router.push("/login");
-    } else {
-      fetchSalesData();
-    }
+    fetchSalesData();
   }, [session, status, router]);
 
   const fetchSalesData = async () => {
@@ -47,7 +41,7 @@ export default function AdminSalesPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 text-zinc-950">
       <h1 className="text-2xl font-bold mb-6">관리자 판매 페이지</h1>
       <SalesDataDisplay data={salesData} />
     </div>

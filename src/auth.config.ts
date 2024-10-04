@@ -6,21 +6,6 @@ import prisma from "@/lib/prisma";
 
 export const authConfig = {
   callbacks: {
-    //세션에 isadmin추가하기. TODO:
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-        token.isAdmin = (user as any).isAdmin;
-      }
-      return token;
-    },
-    async session({ session, token }) {
-      if (session.user) {
-        session.user.id = token.id as string;
-        (session.user as any).isAdmin = token.isAdmin as boolean;
-      }
-      return session;
-    },
     async redirect({ url, baseUrl }) {
       // Allows relative callback URLs
       if (url.startsWith("/")) return `${baseUrl}${url}`;

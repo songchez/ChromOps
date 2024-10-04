@@ -23,7 +23,7 @@ export default function NavUser() {
           >
             <FaUser />
           </div>
-          <ul className="menu dropdown-content bg-base-100 rounded-sm z-[1] w-52 p-2 shadow text-zinc-800 text-md">
+          <ul className="menu dropdown-content bg-base-100 rounded-sm z-[1] w-32 p-2 shadow text-zinc-800 text-md">
             <li>
               <Link href="/mypage" className="hover:bg-zinc-200">
                 마이페이지

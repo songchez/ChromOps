@@ -1,15 +1,25 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
+import { auth } from "@/auth";
+import prisma from "@/lib/prisma";
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const session = useSession();
+  const session = await auth();
 
-  if (session.status !== "authenticated" || !session.data?.user?.isAdmin) {
+  if (!session.user) {
+    redirect("/");
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { email: session.user.email },
+    select: { isAdmin: true },
+  });
+
+  if (!user || !user.isAdmin) {
     redirect("/");
   }
 
@@ -23,7 +33,7 @@ export default function AdminLayout({
         </div>
         <nav className="mt-4">
           <Link
-            href="/admin/products"
+            href="/admin/addproducts"
             className="block py-2 px-4 text-gray-700 hover:bg-gray-200"
           >
             상품 관리

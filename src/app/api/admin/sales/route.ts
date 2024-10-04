@@ -13,14 +13,6 @@ export async function GET() {
     );
   }
 
-  // user 객체에 isAdmin 속성이 있는지 타입 가드를 사용하여 확인
-  if (!("isAdmin" in session.user) || !session.user.isAdmin) {
-    return NextResponse.json(
-      { error: "관리자 권한이 없습니다." },
-      { status: 403 }
-    );
-  }
-
   try {
     const orderItems = await prisma.orderItem.findMany({
       include: {
