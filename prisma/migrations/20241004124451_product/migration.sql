@@ -1,3 +1,6 @@
+-- CreateEnum
+CREATE TYPE "Category" AS ENUM ('outer', 'pants', 'shoes', 'acc');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
@@ -72,12 +75,18 @@ CREATE TABLE "Authenticator" (
 CREATE TABLE "Product" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "price" DOUBLE PRECISION NOT NULL,
+    "price" INTEGER NOT NULL,
     "description" TEXT NOT NULL,
+    "category" "Category" NOT NULL,
+    "slug" TEXT NOT NULL,
+    "sizes" TEXT[],
+    "colors" TEXT[],
+    "rating" DOUBLE PRECISION NOT NULL,
     "mainImage" TEXT NOT NULL,
     "detailImages" TEXT[],
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "reviews" TEXT[],
 
     CONSTRAINT "Product_pkey" PRIMARY KEY ("id")
 );

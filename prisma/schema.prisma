@@ -80,13 +80,26 @@ model Authenticator {
 model Product {
   id           String      @id @default(cuid())
   name         String
-  price        Float
+  price        Int
   description  String
+  category     Category
+  slug         String
+  sizes        String[]
+  colors       String[]
+  rating       Float
   mainImage    String
   detailImages String[]
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
+  reviews      String[]
   orderItems   OrderItem[]
+}
+
+enum Category {
+  outer
+  pants
+  shoes
+  acc
 }
 
 model Order {

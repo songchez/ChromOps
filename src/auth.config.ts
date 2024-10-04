@@ -18,8 +18,7 @@ export const authConfig = {
         const existingUser = await prisma.user.findUnique({
           where: { email: user.email },
         });
-
-        if (existingUser.password !== null) {
+        if (existingUser !== null && existingUser.password !== null) {
           // 크레덴셜로 로그인해야하는데, another provider로 login 했을때
           return `/login?error=AccountExists&email=${user.email}`;
         }

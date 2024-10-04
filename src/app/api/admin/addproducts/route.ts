@@ -1,11 +1,18 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { Category } from "@prisma/client";
 
 export async function POST(request: Request) {
   const formData = await request.formData();
+
   const name = formData.get("name") as string;
-  const price = parseFloat(formData.get("price") as string);
+  const price = parseInt(formData.get("price") as string);
   const description = formData.get("description") as string;
+  const category = formData.get("category") as Category;
+  const slug = formData.get("slug") as string;
+  const sizes = JSON.parse(formData.get("sizes") as string);
+  const colors = JSON.parse(formData.get("colors") as string);
+  const rating = parseFloat(formData.get("rating") as string);
   const mainImage = formData.get("mainImage") as File;
   const detailImages = formData.getAll("detailImages") as File[];
 
@@ -19,8 +26,14 @@ export async function POST(request: Request) {
         name,
         price,
         description,
+        category,
+        slug,
+        sizes,
+        colors,
+        rating,
         mainImage: mainImage.name,
         detailImages: detailImages.map((image) => image.name),
+        reviews: [], // 초기에는 빈 배열로 설정
       },
     });
 

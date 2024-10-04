@@ -1,132 +1,167 @@
 "use client";
 
 import { useState } from "react";
+import { Category } from "@prisma/client";
+import { useRouter } from "next/navigation";
 
-export default function ProductManagement() {
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
-  const [description, setDescription] = useState("");
-  const [mainImage, setMainImage] = useState<File | null>(null);
-  const [detailImages, setDetailImages] = useState<File[]>([]);
+export default function AddProductPage() {
+  const [formData, setFormData] = useState({
+    name: "",
+    price: "",
+    description: "",
+    category: "outer" as Category,
+    slug: "",
+    sizes: "",
+    colors: "",
+    rating: "",
+    mainImage: null,
+    detailImages: [],
+  });
+  const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleImageChange = (e) => {
+    if (e.target.name === "mainImage") {
+      setFormData((prev) => ({ ...prev, mainImage: e.target.files[0] }));
+    } else if (e.target.name === "detailImages") {
+      setFormData((prev) => ({
+        ...prev,
+        detailImages: Array.from(e.target.files),
+      }));
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const formData = new FormData();
-      formData.append("name", name);
-      formData.append("price", price);
-      formData.append("description", description);
-      if (mainImage) formData.append("mainImage", mainImage);
-      detailImages.forEach((image) => formData.append("detailImages", image));
+    const formDataToSend = new FormData();
 
+    for (const key in formData) {
+      if (key === "sizes" || key === "colors") {
+        formDataToSend.append(key, JSON.stringify(formData[key].split(",")));
+      } else if (key === "detailImages") {
+        formData[key].forEach((file) => {
+          formDataToSend.append("detailImages", file);
+        });
+      } else if (key === "mainImage") {
+        formDataToSend.append(key, formData[key]);
+      } else {
+        formDataToSend.append(key, formData[key]);
+      }
+    }
+
+    try {
       const response = await fetch("/api/admin/addproducts", {
         method: "POST",
-        body: formData,
+        body: formDataToSend,
       });
 
       if (response.ok) {
-        // 성공 메시지 표시 또는 리디렉션
-        console.log("상품이 성공적으로 등록되었습니다.");
+        alert("상품이 성공적으로 등록되었습니다.");
+        router.push("/admin/products");
       } else {
-        // 에러 처리
-        console.error("상품 등록 실패");
+        throw new Error("상품 등록에 실패했습니다.");
       }
     } catch (error) {
       console.error("상품 등록 중 오류 발생:", error);
+      alert(error.message);
     }
   };
 
   return (
-    <div className="text-zinc-950">
-      <h2 className="text-2xl font-semibold mb-4">상품 등록</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label
-            htmlFor="name"
-            className="block text-sm font-medium text-gray-700"
-          >
-            상품명
-          </label>
-          <input
-            type="text"
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-            required
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="price"
-            className="block text-sm font-medium text-gray-700"
-          >
-            가격
-          </label>
-          <input
-            type="number"
-            id="price"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-            required
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="description"
-            className="block text-sm font-medium text-gray-700"
-          >
-            설명
-          </label>
-          <textarea
-            id="description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-            rows={3}
-            required
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="mainImage"
-            className="block text-sm font-medium text-gray-700"
-          >
-            메인 이미지
-          </label>
-          <input
-            type="file"
-            id="mainImage"
-            onChange={(e) => setMainImage(e.target.files?.[0] || null)}
-            className="mt-1 block w-full"
-            accept="image/*"
-            required
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="detailImages"
-            className="block text-sm font-medium text-gray-700"
-          >
-            상세 이미지들
-          </label>
-          <input
-            type="file"
-            id="detailImages"
-            onChange={(e) => setDetailImages(Array.from(e.target.files || []))}
-            className="mt-1 block w-full"
-            accept="image/*"
-            multiple
-          />
-        </div>
-        <button
-          type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-        >
-          상품 등록
-        </button>
-      </form>
-    </div>
+    <form onSubmit={handleSubmit} className="space-y-4 p-4">
+      <input
+        name="name"
+        value={formData.name}
+        onChange={handleChange}
+        placeholder="상품명"
+        required
+        className="input input-bordered w-full rounded-sm"
+      />
+      <input
+        name="price"
+        type="number"
+        value={formData.price}
+        onChange={handleChange}
+        placeholder="가격"
+        required
+        className="input input-bordered w-full rounded-sm"
+      />
+      <textarea
+        name="description"
+        value={formData.description}
+        onChange={handleChange}
+        placeholder="설명"
+        required
+        className="textarea textarea-bordered w-full rounded-sm"
+      />
+      <select
+        name="category"
+        value={formData.category}
+        onChange={handleChange}
+        required
+        className="select select-bordered w-full rounded-sm"
+      >
+        <option value="outer">외투</option>
+        <option value="pants">바지</option>
+        <option value="shoes">신발</option>
+        <option value="acc">악세서리</option>
+      </select>
+      <input
+        name="slug"
+        value={formData.slug}
+        onChange={handleChange}
+        placeholder="슬러그"
+        required
+        className="input input-bordered w-full rounded-sm"
+      />
+      <input
+        name="sizes"
+        value={formData.sizes}
+        onChange={handleChange}
+        placeholder="사이즈 (쉼표로 구분)"
+        required
+        className="input input-bordered w-full rounded-sm"
+      />
+      <input
+        name="colors"
+        value={formData.colors}
+        onChange={handleChange}
+        placeholder="색상 (쉼표로 구분)"
+        required
+        className="input input-bordered w-full rounded-sm"
+      />
+      <div className="form-control w-full">
+        <label className="label">
+          <span className="label-text">메인 이미지</span>
+        </label>
+        <input
+          name="mainImage"
+          type="file"
+          onChange={handleImageChange}
+          required
+          className="file-input file-input-bordered w-full rounded-sm"
+        />
+      </div>
+      <div className="form-control w-full">
+        <label className="label">
+          <span className="label-text">상세 이미지들</span>
+        </label>
+        <input
+          name="detailImages"
+          type="file"
+          multiple
+          onChange={handleImageChange}
+          required
+          className="file-input file-input-bordered w-full rounded-sm"
+        />
+      </div>
+      <button type="submit" className="btn btn-primary w-full rounded-sm">
+        상품 등록
+      </button>
+    </form>
   );
 }
