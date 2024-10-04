@@ -6,6 +6,7 @@ import prisma from "@/lib/prisma";
 
 export const authConfig = {
   callbacks: {
+    //세션에 isadmin추가하기. TODO:
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
@@ -27,14 +28,14 @@ export const authConfig = {
       else if (new URL(url).origin === baseUrl) return url;
       return baseUrl;
     },
-    async signIn({ user, account, profile }) {
-      if (account?.provider === "google") {
+    async signIn({ user, account }) {
+      if (account.provider !== "credential") {
         const existingUser = await prisma.user.findUnique({
           where: { email: user.email },
         });
 
-        if (existingUser) {
-          // 이미 존재하는 계정이 있는 경우
+        if (existingUser.password !== null) {
+          // 크레덴셜로 로그인해야하는데, another provider로 login 했을때
           return `/login?error=AccountExists&email=${user.email}`;
         }
       }

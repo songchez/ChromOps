@@ -26,6 +26,7 @@
     "@vercel/postgres": "^0.10.0",
     "bcryptjs": "^2.4.3",
     "daisyui": "^4.12.10",
+    "dotenv": "^16.4.5",
     "gray-matter": "^4.0.3",
     "next": "14.2.5",
     "next-auth": "^5.0.0-beta.22",
@@ -36,12 +37,14 @@
     "rehype-highlight": "^7.0.0",
     "remark": "^15.0.1",
     "remark-gfm": "^4.0.0",
-    "remark-html": "^16.0.1"
+    "remark-html": "^16.0.1",
+    "ws": "^8.18.0"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.15",
     "@types/node": "^22.2.0",
     "@types/react": "18.3.3",
+    "@types/ws": "^8.5.12",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
     "postcss": "^8",

@@ -10,7 +10,7 @@ export default function AdminLayout({
   const session = useSession();
 
   if (session.status !== "authenticated" || !session.data?.user?.isAdmin) {
-    redirect("/login");
+    redirect("/");
   }
 
   return (

@@ -12,7 +12,7 @@ export default function Hero() {
           className="object-cover"
         />
       </div>
-      <div className="text-fuck relative z-10 text-left -inset-x-40">
+      <div className="relative text-left -inset-x-40">
         <h1 className="text-5xl font-bold mb-4">
           역사를 뒤집고 승리를 쟁취하라
         </h1>

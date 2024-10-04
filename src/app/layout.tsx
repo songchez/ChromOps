@@ -21,7 +21,7 @@ export default function RootLayout({
     <html lang="ko">
       <body className={notoSans.className}>
         <Providers>
-          <div className="bg-slate-950 text-white min-h-screen">
+          <div className="bg-zinc-950 text-white min-h-screen">
             <Header />
             {children}
             <Footer />

@@ -17,7 +17,7 @@ export default function LoginForm() {
     const emailParam = searchParams.get("email");
     if (errorType === "AccountExists" && emailParam) {
       setError(
-        `${emailParam} 주소로 이미 가입된 계정이 존재합니다. 기존 계정으로 로그인해 주세요.`
+        `${emailParam} 주소로 이미 가입된 소셜계정이 존재합니다. 소셜계정으로 로그인해 주세요.`
       );
       setEmail(emailParam);
     }

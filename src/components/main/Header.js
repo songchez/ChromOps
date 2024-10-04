@@ -1,12 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { FaCartShopping, FaMagnifyingGlass, FaUser } from "react-icons/fa6";
+import { FaCartShopping } from "react-icons/fa6";
 import NavUser from "./sessionNav/navUser";
 
 export default function Header() {
   return (
-    <header className="bg-black py-4 overflow-hidden">
+    <header className="py-4">
       <div className="container mx-auto md:flex-row flex flex-col gap-2 justify-between items-center ">
         <Link href="/">
           <Image
@@ -21,44 +21,44 @@ export default function Header() {
           <nav>
             <ul className="flex space-x-4">
               <li>
-                <a href="/shop" className="hover:text-yellow-500">
+                <Link href="/shop" className="hover:text-yellow-500">
                   OUTER
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/shop" className="hover:text-yellow-500">
+                <Link href="/shop" className="hover:text-yellow-500">
                   PANTS
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/shop" className="hover:text-yellow-500">
+                <Link href="/shop" className="hover:text-yellow-500">
                   SHOES
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/shop" className="hover:text-yellow-500">
+                <Link href="/shop" className="hover:text-yellow-500">
                   ACC
-                </a>
+                </Link>
               </li>
               <span>|</span>
               <li>
-                <a href="/blog" className="hover:text-yellow-500">
+                <Link href="/blog" className="hover:text-yellow-500">
                   BLOG
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/contact" className="hover:text-yellow-500">
+                <Link href="/contact" className="hover:text-yellow-500">
                   CONTACT
-                </a>
+                </Link>
               </li>
             </ul>
           </nav>
           <nav className="hidden lg:flex">
-            <ul className="flex space-x-4">
-              <li>
-                <a href="/cart" className="hover:text-yellow-500 text-xl">
+            <ul className="flex space-x-3">
+              <li className="flex items-center">
+                <Link href="/cart" className="hover:text-yellow-500 text-xl">
                   <FaCartShopping />
-                </a>
+                </Link>
               </li>
               <NavUser />
             </ul>
