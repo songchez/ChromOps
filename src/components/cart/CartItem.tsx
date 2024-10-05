@@ -4,7 +4,7 @@ import Link from "next/link";
 import { FaMinus, FaPlus, FaX } from "react-icons/fa6";
 
 interface CartItemProps {
-  item: any;
+  item: CartItem;
   updateQuantity: (newQuantity: number) => void;
   removeItem: () => void;
 }
@@ -17,15 +17,13 @@ export default function CartItem({
   return (
     <div className="flex items-center border-b py-4">
       <Link href={`/shop/${item.id}`}>
-        {item.mainImage && (
-          <Image
-            src={item.mainImage}
-            alt={item.name}
-            width={100}
-            height={100}
-            className="mr-4"
-          />
-        )}
+        <Image
+          src={item.mainImage}
+          alt={item.name}
+          width={100}
+          height={100}
+          className="mr-4"
+        />
       </Link>
       <div className="flex-grow">
         <h2 className="font-semibold">{item.name}</h2>

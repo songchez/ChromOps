@@ -108,13 +108,9 @@ export default function PerchaseActions({ product }) {
   );
 }
 
+// 장바구니에 상품을 추가하는 함수
 const handleAddToCart = async ({ product, quantity, size, color }) => {
-  // 기존 장바구니 가져오기
-
-  // API를 통해 현재 장바구니 상태를 가져옵니다
-  const response = await fetch("/api/cart");
-  const existingCart = await response.json();
-  // 새로 추가할 상품 (예시 상품 정보)
+  // 새로 추가할 상품 정보 객체 생성
   const newItem = {
     id: product.id,
     name: product.name,
@@ -124,27 +120,14 @@ const handleAddToCart = async ({ product, quantity, size, color }) => {
     size: size,
     slug: product.slug,
   };
-  // 장바구니에 동일한 상품이 있는지 확인(컬러와 사이즈가 다르면 다른제품으로 취급)
-  const existingItemIndex = existingCart.findIndex(
-    (item) =>
-      item.id === newItem.id &&
-      item.color === newItem.color &&
-      item.size === newItem.size
-  );
-
-  if (existingItemIndex >= 0) {
-    // 기존에 있는 상품이면 수량만 증가
-    existingCart[existingItemIndex].quantity += 1;
-  } else {
-    // 새 상품이면 추가
-    existingCart.push(newItem);
-  }
 
   // localStorage를 사용하여 장바구니 업데이트
   try {
+    // localStorage에서 기존 장바구니 아이템 가져오기
     const cartItemsJson = LocalStorage.getItem("cartItems");
     let cartItems = cartItemsJson ? JSON.parse(cartItemsJson) : [];
 
+    // 동일한 상품(id, 색상, 사이즈가 모두 일치)이 이미 장바구니에 있는지 확인
     const existingItemIndex = cartItems.findIndex(
       (item) =>
         item.id === newItem.id &&
@@ -152,21 +135,27 @@ const handleAddToCart = async ({ product, quantity, size, color }) => {
         item.size === newItem.size
     );
 
+    // 동일한 상품이 있으면 수량만 증가, 없으면 새 상품 추가
     if (existingItemIndex >= 0) {
       cartItems[existingItemIndex].quantity += newItem.quantity;
     } else {
-      cartItems.push(newItem);
+      const newItemWithId = {
+        ...newItem,
+        itemId: `${newItem.id}_${newItem.color}_${newItem.size}_${Date.now()}`,
+      };
+      cartItems.push(newItemWithId);
     }
 
-    LocalStorage.setItem("cartItems", JSON.stringify(cartItems));
+    // 업데이트된 장바구니 정보를 localStorage에 저장
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
     console.log("상품이 성공적으로 장바구니에 담겼습니다!");
   } catch (error) {
     console.error("장바구니 업데이트 오류:", error);
   }
-  // 모달 열기
+
+  // 상품 추가 완료 모달 열기
   const modal = document.getElementById("my_modal_2") as HTMLDialogElement;
   if (modal) {
     modal.showModal();
   }
-  return;
 };

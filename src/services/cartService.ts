@@ -1,5 +1,4 @@
 import { LocalStorage } from "@/lib/localStorage";
-import prisma from "@/lib/prisma";
 
 export async function getCartProducts() {
   const cartItemsJson = LocalStorage.getItem("cartItems");
@@ -8,31 +7,27 @@ export async function getCartProducts() {
   }
 
   const cartItems = JSON.parse(cartItemsJson);
+  const ids = cartItems.map((item: { id: string }) => item.id);
 
-  const products = await Promise.all(
-    cartItems.map(async (item: { id: string }) => {
-      const product = await prisma.product.findUnique({
-        where: { id: item.id },
-        select: {
-          id: true,
-          name: true,
-          price: true,
-          mainImages: true,
-          slug: true,
-        },
-      });
-      return product;
-    })
-  );
+  const response = await fetch(`/api/cart?ids=${ids.join(",")}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 
-  return cartItems.map(
-    (item: { id: string; quantity: number }, index: number) => {
-      const product = products[index];
-      return {
-        ...item,
-        ...product,
-        mainImage: product?.mainImages[0] || null,
-      };
-    }
-  );
+  if (!response.ok) {
+    throw new Error("장바구니 상품을 가져오는데 실패했습니다.");
+  }
+
+  const products = await response.json();
+
+  return cartItems.map((item: { id: string; quantity: number }) => {
+    const product = products.find((p: { id: string }) => p.id === item.id);
+    return {
+      ...item,
+      ...product,
+      mainImage: product?.mainImages[0] || null,
+    };
+  });
 }

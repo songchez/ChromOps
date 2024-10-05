@@ -6,9 +6,13 @@ declare global {
     daum: any;
   }
   interface CartItem {
+    itemId: string;
     id: string;
     name: string;
     price: number;
+    color: string;
+    size: string;
     quantity: number;
+    mainImage: string;
   }
 }
