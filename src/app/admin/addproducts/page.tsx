@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Category } from "@prisma/client";
 import { useRouter } from "next/navigation";
 
 export default function AddProductPage() {
@@ -83,7 +82,7 @@ export default function AddProductPage() {
       if (response.ok) {
         alert("상품이 성공적으로 등록되었습니다.");
         localStorage.removeItem("productFormData");
-        router.push("/admin/products");
+        router.push("/admin/addproducts");
       } else {
         throw new Error("상품 등록에 실패했습니다.");
       }

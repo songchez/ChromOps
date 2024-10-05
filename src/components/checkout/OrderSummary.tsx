@@ -1,12 +1,5 @@
 import React from "react";
 
-interface CartItem {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
-}
-
 interface OrderSummaryProps {
   cartItems: CartItem[];
   getTotalAmount: (items: CartItem[]) => number;

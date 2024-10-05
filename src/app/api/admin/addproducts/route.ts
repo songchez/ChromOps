@@ -1,12 +1,17 @@
-// 필요한 모듈과 라이브러리를 가져옵니다.
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { uploadToDrive } from "@/utils/googleDrive";
-import fs from "fs/promises";
-import os from "os";
-import path from "path";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import crypto from "crypto";
 
-type Category = "outer" | "pants" | "shoes" | "acc";
+// S3 클라이언트 초기화
+const s3Client = new S3Client({
+  region: process.env.AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+  },
+});
 
 // POST 요청을 처리하는 함수입니다.
 export async function POST(request: Request) {
@@ -26,15 +31,15 @@ export async function POST(request: Request) {
   const detailImages = formData.getAll("detailImages") as File[];
 
   try {
-    // 메인 이미지를 Google Drive에 업로드합니다.
-    const mainImageUrl = await uploadImageToDrive(mainImage);
+    // 메인 이미지를 S3에 업로드
+    const mainImageUrl = await uploadImageToS3(mainImage);
 
-    // 상세 이미지들을 Google Drive에 업로드합니다.
+    // 상세 이미지들을 S3에 업로드
     const detailImageUrls = await Promise.all(
-      detailImages.map((image) => uploadImageToDrive(image))
+      detailImages.map((image) => uploadImageToS3(image))
     );
 
-    // 데이터베이스에 새 상품을 생성합니다.
+    // 데이터베이스에 새 상품을 생성
     const product = await prisma.product.create({
       data: {
         name,
@@ -69,38 +74,29 @@ export async function POST(request: Request) {
   }
 }
 
-// 이미지를 Google Drive에 업로드하는 함수입니다.
-async function uploadImageToDrive(file: File): Promise<string> {
-  // 임시 파일 경로를 생성합니다.
-  const tempDir = os.tmpdir();
-  const tempFilePath = path.join(tempDir, file.name);
+// 이미지를 S3에 업로드하는 함수입니다.
+async function uploadImageToS3(file: File): Promise<string> {
+  const fileBuffer = await file.arrayBuffer();
+  const buffer = Buffer.from(fileBuffer);
+
+  const fileName = `${crypto.randomUUID()}-${file.name}`;
+  const key = `products/${fileName}`;
+
+  const command = new PutObjectCommand({
+    Bucket: process.env.AWS_S3_BUCKET_NAME,
+    Key: key,
+    Body: buffer,
+    ContentType: file.type,
+  });
 
   try {
-    // 파일 데이터를 버퍼로 변환합니다.
-    const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-
-    // 임시 파일을 생성합니다.
-    await fs.writeFile(tempFilePath, buffer);
-
-    // Google Drive에 파일을 업로드하고 URL을 받아옵니다.
-    const imageUrl = await uploadToDrive({
-      originalname: file.name,
-      mimetype: file.type,
-      path: tempFilePath,
+    await s3Client.send(command);
+    const signedUrl = await getSignedUrl(s3Client, command, {
+      expiresIn: 3600,
     });
-
-    return imageUrl;
+    return signedUrl.split("?")[0]; // URL에서 쿼리 파라미터 제거
   } catch (error) {
-    // 오류 발생 시 로그를 남기고 에러를 던집니다.
-    console.error("이미지 업로드 중 오류 발생:", error);
+    console.error("S3 이미지 업로드 중 오류 발생:", error);
     throw error;
-  } finally {
-    // 임시 파일을 삭제합니다.
-    try {
-      await fs.unlink(tempFilePath);
-    } catch (error) {
-      console.error("임시 파일 삭제 중 오류 발생:", error);
-    }
   }
 }

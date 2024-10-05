@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.5.3",
+    "@aws-sdk/client-s3": "^3.665.0",
+    "@aws-sdk/s3-request-presigner": "^3.665.0",
     "@google-cloud/local-auth": "^3.0.1",
     "@mdx-js/loader": "^3.0.1",
     "@mdx-js/react": "^3.0.1",

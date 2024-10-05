@@ -9,25 +9,10 @@ import { PaymentMethodSelector } from "@/components/checkout/PaymentMethodSelect
 import { OrderSummary } from "@/components/checkout/OrderSummary";
 import Script from "next/script";
 
-// 장바구니 아이템 타입 정의
-interface CartItem {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
-}
-
 // 주소 타입 정의
 interface Address {
   address: string;
   zonecode: string;
-}
-
-// 전역 window 객체에 daum 속성 추가
-declare global {
-  interface Window {
-    daum: any;
-  }
 }
 
 const CheckoutPage: React.FC = () => {
