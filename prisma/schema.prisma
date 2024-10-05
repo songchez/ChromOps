@@ -88,7 +88,7 @@ model Product {
   sizes        String[]
   colors       String[]
   rating       Float
-  mainImage    String
+  mainImages   String[]
   detailImages String[]
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt

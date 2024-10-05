@@ -29,6 +29,7 @@
     "bcryptjs": "^2.4.3",
     "daisyui": "^4.12.10",
     "dotenv": "^16.4.5",
+    "framer-motion": "^11.11.1",
     "googleapis": "^144.0.0",
     "gray-matter": "^4.0.3",
     "next": "14.2.5",

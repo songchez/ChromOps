@@ -1,9 +1,10 @@
 import React from "react";
 import Image from "next/image";
 import { FaStar } from "react-icons/fa6";
-import Carousel from "@/components/productPage/Carousel";
+import MainCarousel from "@/components/productPage/MainCarousel";
 import PerchaseActions from "@/components/productPage/PerchaseActions";
 import prisma from "@/lib/prisma";
+import Link from "next/link";
 
 const getProduct = async (slug: string) => {
   const product = await prisma.product.findUnique({
@@ -28,11 +29,7 @@ const getProduct = async (slug: string) => {
   return product;
 };
 
-export default async function ProductPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export default async function ProductPage({ params }) {
   const product = await getProduct(params.slug);
 
   return (
@@ -40,7 +37,7 @@ export default async function ProductPage({
       <div className="max-w-4xl p-6">
         {/* Product Header with Carousel */}
         <div className="flex flex-col lg:flex-row items-center lg:items-center justify-center gap-6 mb-10">
-          <Carousel product={product} />
+          <MainCarousel product={product} />
           <div className="mx-auto p-6">
             {/* 오른쪽전체간격 */}
             <div className="space-y-8">
@@ -63,9 +60,9 @@ export default async function ProductPage({
                       />
                     ))}
                   </div>
-                  <a href="#" className="text-xs text-primary">
+                  <Link href="#" className="text-xs text-primary">
                     {product.reviews.length}개의 리뷰
-                  </a>
+                  </Link>
                 </div>
               </div>
               {/* 구매액션 섹션(client side) */}
@@ -77,13 +74,16 @@ export default async function ProductPage({
         {/* Detailed Images Section */}
         <div className="mt-10">
           <h2 className="text-2xl font-bold mb-6">상품 상세 이미지</h2>
-          <Image
-            src={`/products/${product.id}/detail_page.jpg`} // Use a detailed image if available
-            alt={product.name}
-            width={870}
-            height={2000}
-            className="object-cover rounded-lg"
-          />
+          {product.detailImages.map((image, index) => (
+            <Image
+              key={index}
+              src={image}
+              alt={`${product.name} 상세 이미지 ${index + 1}`}
+              width={870}
+              height={2000}
+              className="object-cover rounded-lg mb-4"
+            />
+          ))}
         </div>
 
         {/* 리뷰 섹션 */}

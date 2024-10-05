@@ -13,7 +13,7 @@ export default function AddProductPage() {
     sizes: "",
     colors: "",
     rating: "",
-    mainImage: null,
+    mainImages: [],
     detailImages: [],
   });
   const router = useRouter();
@@ -25,7 +25,7 @@ export default function AddProductPage() {
       setFormData((prevData) => ({
         ...prevData,
         ...parsedData,
-        mainImage: null,
+        mainImages: [],
         detailImages: [],
       }));
     }
@@ -37,8 +37,11 @@ export default function AddProductPage() {
   };
 
   const handleImageChange = (e) => {
-    if (e.target.name === "mainImage") {
-      setFormData((prev) => ({ ...prev, mainImage: e.target.files[0] }));
+    if (e.target.name === "mainImages") {
+      setFormData((prev) => ({
+        ...prev,
+        mainImages: Array.from(e.target.files),
+      }));
     } else if (e.target.name === "detailImages") {
       setFormData((prev) => ({
         ...prev,
@@ -49,7 +52,7 @@ export default function AddProductPage() {
 
   const handleSave = () => {
     const dataToSave = { ...formData };
-    delete dataToSave.mainImage;
+    delete dataToSave.mainImages;
     delete dataToSave.detailImages;
     localStorage.setItem("productFormData", JSON.stringify(dataToSave));
     alert("폼 데이터가 임시 저장되었습니다.");
@@ -66,8 +69,10 @@ export default function AddProductPage() {
         formData[key].forEach((file) => {
           formDataToSend.append("detailImages", file);
         });
-      } else if (key === "mainImage") {
-        formDataToSend.append(key, formData[key]);
+      } else if (key === "mainImages") {
+        formData[key].forEach((file) => {
+          formDataToSend.append("mainImages", file);
+        });
       } else {
         formDataToSend.append(key, formData[key]);
       }
@@ -162,11 +167,12 @@ export default function AddProductPage() {
       />
       <div className="form-control w-full">
         <label className="label">
-          <span className="label-text">메인 이미지</span>
+          <span className="label-text">메인 이미지 5개</span>
         </label>
         <input
-          name="mainImage"
+          name="mainImages"
           type="file"
+          multiple
           onChange={handleImageChange}
           required
           className="file-input file-input-bordered w-full rounded-sm"

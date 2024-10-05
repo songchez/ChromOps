@@ -1,5 +1,6 @@
 "use client";
 
+import { LocalStorage } from "@/lib/localStorage";
 import Link from "next/link";
 import React, { useState } from "react";
 import { FaAngleRight, FaCartShopping } from "react-icons/fa6";
@@ -107,10 +108,12 @@ export default function PerchaseActions({ product }) {
   );
 }
 
-const handleAddToCart = ({ product, quantity, size, color }) => {
+const handleAddToCart = async ({ product, quantity, size, color }) => {
   // 기존 장바구니 가져오기
 
-  const existingCart = JSON.parse(localStorage.getItem("cartItems")) || [];
+  // API를 통해 현재 장바구니 상태를 가져옵니다
+  const response = await fetch("/api/cart");
+  const existingCart = await response.json();
   // 새로 추가할 상품 (예시 상품 정보)
   const newItem = {
     id: product.id,
@@ -137,9 +140,33 @@ const handleAddToCart = ({ product, quantity, size, color }) => {
     existingCart.push(newItem);
   }
 
-  // 로컬 스토리지에 저장
-  localStorage.setItem("cartItems", JSON.stringify(existingCart));
+  // localStorage를 사용하여 장바구니 업데이트
+  try {
+    const cartItemsJson = LocalStorage.getItem("cartItems");
+    let cartItems = cartItemsJson ? JSON.parse(cartItemsJson) : [];
 
-  // 모달열기
-  return document.getElementById("my_modal_2").showModal();
+    const existingItemIndex = cartItems.findIndex(
+      (item) =>
+        item.id === newItem.id &&
+        item.color === newItem.color &&
+        item.size === newItem.size
+    );
+
+    if (existingItemIndex >= 0) {
+      cartItems[existingItemIndex].quantity += newItem.quantity;
+    } else {
+      cartItems.push(newItem);
+    }
+
+    LocalStorage.setItem("cartItems", JSON.stringify(cartItems));
+    console.log("상품이 성공적으로 장바구니에 담겼습니다!");
+  } catch (error) {
+    console.error("장바구니 업데이트 오류:", error);
+  }
+  // 모달 열기
+  const modal = document.getElementById("my_modal_2") as HTMLDialogElement;
+  if (modal) {
+    modal.showModal();
+  }
+  return;
 };

@@ -33,9 +33,9 @@ export default async function Collection() {
               key={product.id}
               className="bg-white text-black rounded-sm overflow-hidden"
             >
-              <Link href={`/shop/${product.slug}`}>
+              <Link href={`shop/${product.id}`}>
                 <Image
-                  src={`/products/${product.id}/thumbnail_1.jpg`}
+                  src={product.mainImages[0]}
                   alt={product.name}
                   width={300}
                   height={250}

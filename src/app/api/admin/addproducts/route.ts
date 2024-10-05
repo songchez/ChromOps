@@ -3,7 +3,6 @@ import prisma from "@/lib/prisma";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import crypto from "crypto";
-import { getProducts } from "@/services/productService";
 
 // S3 클라이언트 초기화
 const s3Client = new S3Client({
@@ -28,12 +27,14 @@ export async function POST(request: Request) {
   const sizes = JSON.parse(formData.get("sizes") as string);
   const colors = JSON.parse(formData.get("colors") as string);
   const rating = parseFloat(formData.get("rating") as string) || 0;
-  const mainImage = formData.get("mainImage") as File;
+  const mainImages = formData.getAll("mainImages") as File[];
   const detailImages = formData.getAll("detailImages") as File[];
 
   try {
     // 메인 이미지를 S3에 업로드
-    const mainImageUrl = await uploadImageToS3(mainImage);
+    const mainImageUrls = await Promise.all(
+      mainImages.map((image) => uploadImageToS3(image))
+    );
 
     // 상세 이미지들을 S3에 업로드
     const detailImageUrls = await Promise.all(
@@ -51,7 +52,7 @@ export async function POST(request: Request) {
         sizes,
         colors,
         rating,
-        mainImage: mainImageUrl,
+        mainImages: mainImageUrls,
         detailImages: detailImageUrls,
       },
     });

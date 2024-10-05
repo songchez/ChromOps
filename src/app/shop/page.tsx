@@ -12,9 +12,9 @@ export default async function ShopPage() {
           key={product.id}
           className="rounded-sm overflow-hidden hover:opacity-90"
         >
-          <Link href={`/shop/${product.id}`} as={`/shop/${product.slug}`}>
+          <Link href={`/shop/${product.id}`}>
             <Image
-              src={product.mainImage}
+              src={product.mainImages[0]}
               alt={product.name}
               width={300}
               height={250}
