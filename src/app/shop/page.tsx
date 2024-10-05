@@ -1,7 +1,10 @@
 import Image from "next/image";
-import products from "@/data/products.json";
 import Link from "next/link";
-export default function ShopPage() {
+import prisma from "@/lib/prisma";
+
+export default async function ShopPage() {
+  const products = await prisma.product.findMany();
+
   return (
     <div className="grid grid-cols-2 lg:grid-cols-5 md:grid-cols-3 gap-8 p-12 bg-white">
       {products.map((product) => (
@@ -9,9 +12,9 @@ export default function ShopPage() {
           key={product.id}
           className="rounded-sm overflow-hidden hover:opacity-90"
         >
-          <Link href={`/shop/${product.slug}`}>
+          <Link href={`/shop/${product.id}`} as={`/shop/${product.slug}`}>
             <Image
-              src={`/products/${product.id}/thumbnail_1.jpg`}
+              src={product.mainImage}
               alt={product.name}
               width={300}
               height={250}

@@ -3,6 +3,7 @@ import prisma from "@/lib/prisma";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import crypto from "crypto";
+import { getProducts } from "@/services/productService";
 
 // S3 클라이언트 초기화
 const s3Client = new S3Client({
@@ -52,7 +53,6 @@ export async function POST(request: Request) {
         rating,
         mainImage: mainImageUrl,
         detailImages: detailImageUrls,
-        reviews: [],
       },
     });
 

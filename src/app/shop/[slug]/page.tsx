@@ -1,18 +1,39 @@
 import React from "react";
-import products from "@/data/products.json";
 import Image from "next/image";
-import { notFound } from "next/navigation";
 import { FaStar } from "react-icons/fa6";
 import Carousel from "@/components/productPage/Carousel";
 import PerchaseActions from "@/components/productPage/PerchaseActions";
+import prisma from "@/lib/prisma";
 
-export default function ProductPage({ params }) {
-  const { slug } = params;
-  const product = products.find((item) => item.slug === slug);
+const getProduct = async (slug: string) => {
+  const product = await prisma.product.findUnique({
+    where: { id: slug },
+    include: {
+      reviews: {
+        include: {
+          user: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
+    },
+  });
 
   if (!product) {
-    return notFound();
+    throw new Error("제품을 찾을 수 없습니다");
   }
+
+  return product;
+};
+
+export default async function ProductPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  const product = await getProduct(params.slug);
 
   return (
     <div className="flex w-full justify-center bg-white text-slate-800">
@@ -43,7 +64,7 @@ export default function ProductPage({ params }) {
                     ))}
                   </div>
                   <a href="#" className="text-xs text-primary">
-                    {product.reviewCount}개의 리뷰
+                    {product.reviews.length}개의 리뷰
                   </a>
                 </div>
               </div>
@@ -64,7 +85,50 @@ export default function ProductPage({ params }) {
             className="object-cover rounded-lg"
           />
         </div>
+
+        {/* 리뷰 섹션 */}
+        <div className="mt-16">
+          <h2 className="text-2xl font-bold mb-6">고객 리뷰</h2>
+          {product.reviews && product.reviews.length > 0 ? (
+            <ul className="space-y-6">
+              {product.reviews.map((review) => (
+                <li key={review.id} className="border-b pb-4">
+                  <div className="flex items-center mb-2">
+                    <div className="flex items-center">
+                      {[...Array(5)].map((_, i) => (
+                        <FaStar
+                          key={i}
+                          className={`w-4 h-4 ${
+                            i < review.rating
+                              ? "text-yellow-400"
+                              : "text-gray-300"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    <span className="ml-2 text-sm text-gray-600">
+                      {review.createdAt.toLocaleDateString()}
+                    </span>
+                  </div>
+                  <p className="text-sm mb-2">{review.comment}</p>
+                  <p className="text-xs text-gray-500">
+                    작성자: {review.user.name}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-gray-500">아직 리뷰가 없습니다.</p>
+          )}
+        </div>
       </div>
     </div>
   );
+}
+
+export async function generateStaticParams() {
+  const products = await prisma.product.findMany();
+  return products.map((product) => ({
+    slug: product.slug,
+  }));
 }
