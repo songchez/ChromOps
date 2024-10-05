@@ -94,7 +94,6 @@ model Product {
   reviews      String[]
   orderItems   OrderItem[]
 }
-
 enum Category {
   outer
   pants
