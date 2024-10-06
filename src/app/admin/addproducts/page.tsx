@@ -99,72 +99,107 @@ export default function AddProductPage() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 p-4 text-black">
-      <input
-        name="name"
-        value={formData.name}
-        onChange={handleChange}
-        placeholder="상품명"
-        required
-        className="input input-bordered w-full rounded-sm"
-      />
-      <div className="relative">
+      <div>
+        <div className="label">
+          <span className="label-text">상품명</span>
+        </div>
         <input
-          name="price"
-          type="number"
-          value={formData.price}
+          name="name"
+          value={formData.name}
           onChange={handleChange}
-          placeholder="가격"
+          placeholder="상품명"
           required
-          className="input input-bordered w-full rounded-sm pl-8"
+          className="input input-bordered w-full rounded-sm"
         />
-        <span className="absolute left-3 top-1/2 transform -translate-y-1/2">
-          원
-        </span>
       </div>
-      <textarea
-        name="description"
-        value={formData.description}
-        onChange={handleChange}
-        placeholder="상세설명"
-        required
-        className="textarea textarea-bordered w-full rounded-sm"
-      />
-      <select
-        name="category"
-        value={formData.category}
-        onChange={handleChange}
-        required
-        className="select select-bordered w-full rounded-sm"
-      >
-        <option value="outer">아우터</option>
-        <option value="pants">바지</option>
-        <option value="shoes">신발</option>
-        <option value="acc">악세서리</option>
-      </select>
-      <input
-        name="slug"
-        value={formData.slug}
-        onChange={handleChange}
-        placeholder="슬러그"
-        required
-        className="input input-bordered w-full rounded-sm"
-      />
-      <input
-        name="sizes"
-        value={formData.sizes}
-        onChange={handleChange}
-        placeholder="사이즈옵션 (쉼표로 구분)"
-        required
-        className="input input-bordered w-full rounded-sm"
-      />
-      <input
-        name="colors"
-        value={formData.colors}
-        onChange={handleChange}
-        placeholder="색상옵션 (쉼표로 구분)"
-        required
-        className="input input-bordered w-full rounded-sm"
-      />
+      <div>
+        <div className="label">
+          <span className="label-text">가격</span>
+        </div>
+        <div className="relative">
+          <input
+            name="price"
+            type="number"
+            value={formData.price}
+            onChange={handleChange}
+            placeholder="가격"
+            required
+            className="input input-bordered w-full rounded-sm pl-8"
+          />
+          <span className="absolute left-3 top-1/2 transform -translate-y-1/2">
+            원
+          </span>
+        </div>
+      </div>
+      <div>
+        <div className="label">
+          <span className="label-text">상세설명</span>
+        </div>
+        <textarea
+          name="description"
+          value={formData.description}
+          onChange={handleChange}
+          placeholder="상세설명"
+          required
+          className="textarea textarea-bordered w-full rounded-sm"
+        />
+      </div>
+      <div>
+        <div className="label">
+          <span className="label-text">카테고리</span>
+        </div>
+        <select
+          name="category"
+          value={formData.category}
+          onChange={handleChange}
+          required
+          className="select select-bordered w-full rounded-sm"
+        >
+          <option value="outer">아우터</option>
+          <option value="pants">바지</option>
+          <option value="shoes">신발</option>
+          <option value="acc">악세서리</option>
+        </select>
+      </div>
+      <div>
+        <div className="label">
+          <span className="label-text">슬러그</span>
+        </div>
+        <input
+          name="slug"
+          value={formData.slug}
+          onChange={handleChange}
+          placeholder="슬러그"
+          required
+          className="input input-bordered w-full rounded-sm"
+        />
+      </div>
+      <div>
+        <div className="label">
+          <span className="label-text">사이즈옵션</span>
+        </div>
+        <input
+          name="sizes"
+          value={formData.sizes}
+          onChange={handleChange}
+          placeholder="사이즈옵션 (쉼표로 구분)"
+          required
+          className="input input-bordered w-full rounded-sm"
+        />
+      </div>
+      <div>
+        <div className="label">
+          <span className="label-text">색상옵션</span>
+        </div>
+        <input
+          name="colors"
+          value={formData.colors}
+          onChange={handleChange}
+          placeholder="색상옵션 (쉼표로 구분)"
+          required
+          className="input input-bordered w-full rounded-sm"
+        />
+      </div>
       <div className="form-control w-full">
         <label className="label">
           <span className="label-text">메인 이미지 5개</span>

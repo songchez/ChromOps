@@ -63,6 +63,7 @@ export const ShippingForm: React.FC<ShippingFormProps> = ({
             className="input input-bordered flex-grow rounded-sm"
             value={address.address}
             readOnly
+            disabled
           />
           <button
             onClick={handleAddressSearch}
@@ -77,6 +78,7 @@ export const ShippingForm: React.FC<ShippingFormProps> = ({
           className="input input-bordered w-full rounded-sm mb-2"
           value={address.zonecode}
           readOnly
+          disabled
         />
         <input
           type="text"
