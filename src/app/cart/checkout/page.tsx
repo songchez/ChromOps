@@ -24,7 +24,7 @@ const CheckoutPage: React.FC = () => {
     zonecode: "",
   });
   const [detailAddress, setDetailAddress] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState("KAKAOPAY");
+  const [paymentMethod, setPaymentMethod] = useState("EASY_PAY");
   const [recipient, setRecipient] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [deliveryNote, setDeliveryNote] = useState("문앞에 놔주세요");

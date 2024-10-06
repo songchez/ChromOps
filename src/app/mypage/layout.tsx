@@ -1,5 +1,34 @@
 import React from "react";
+import Link from "next/link";
 
-export default function mypageLayout({ children }) {
-  return <div>{children}</div>;
+const navItems = [
+  { href: "/mypage", label: "주문/배송조회" },
+  { href: "/mypage/returns", label: "교환반품내역" },
+  { href: "/mypage/reviews", label: "상품리뷰" },
+  { href: "/mypage/account", label: "계정관리" },
+];
+
+export default function MypageLayout({ children }) {
+  return (
+    <div className="flex text-zinc-950 bg-white">
+      <nav className="w-64 h-screen bg-gray-100 p-6">
+        <h2 className="text-xl font-bold mb-6">마이페이지</h2>
+        <ul>
+          {navItems.map((item) => (
+            <>
+              <li key={item.href} className="mb-4">
+                <Link
+                  href={item.href}
+                  className="text-gray-700 hover:text-black"
+                >
+                  {item.label}
+                </Link>
+              </li>
+            </>
+          ))}
+        </ul>
+      </nav>
+      <main className="flex-1 p-6">{children}</main>
+    </div>
+  );
 }

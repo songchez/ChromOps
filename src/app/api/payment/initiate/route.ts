@@ -4,6 +4,7 @@ import { auth } from "@/auth";
 
 export async function POST(req: Request) {
   const session = await auth();
+
   if (!session?.user) {
     return NextResponse.json(
       { error: "인증되지 않은 사용자입니다." },
@@ -23,9 +24,19 @@ export async function POST(req: Request) {
   } = await req.json();
 
   try {
+    const channelKey =
+      paymentMethod === "EASY_PAY"
+        ? process.env.PORTONE_KAKAO_CHANNEL_KEY
+        : process.env.PORTONE_HANGUCK_CHANNEL_KEY;
+
+    const Currentuser = await prisma.user.findUnique({
+      where: { email: session.user.email },
+      select: { id: true },
+    });
+
     const order = await prisma.order.create({
       data: {
-        userId: session.user.id,
+        userId: Currentuser.id,
         status: "PAYMENT_WAITING",
         totalAmount,
         shippingAddress: `${address.address} ${address.detailAddress} ${address.zonecode}`,
@@ -38,6 +49,8 @@ export async function POST(req: Request) {
             productId: item.id,
             quantity: item.quantity,
             price: item.price,
+            size: item.size,
+            color: item.color,
           })),
         },
       },
@@ -45,23 +58,29 @@ export async function POST(req: Request) {
 
     const paymentData = {
       storeId: process.env.PORTONE_STORE_ID,
-      channelKey: process.env.PORTONE_CHANNEL_KEY,
-      paymentId: `payment-${order.id}`,
+      channelKey: channelKey,
+      paymentId: `payment${order.id}`,
       orderName,
       totalAmount,
       currency: "CURRENCY_KRW",
       payMethod: paymentMethod,
+      ...(paymentMethod === "EASY_PAY" && {
+        easyPay: {
+          easyPayProvider: "KAKAOPAY",
+        },
+      }),
       customer: {
-        customerId: session.user.id,
+        customerId: Currentuser.id,
         name: recipient,
         phoneNumber,
         address: {
-          addressLine1: `${address.address} ${address.detailAddress}`,
+          addressLine1: address.address,
+          addressLine2: address.detailAddress,
           postcode: address.zonecode,
         },
       },
     };
-
+    console.log(paymentData);
     return NextResponse.json({ success: true, paymentData, orderId: order.id });
   } catch (error) {
     console.error("Order creation error:", error);
