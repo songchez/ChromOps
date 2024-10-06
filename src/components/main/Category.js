@@ -1,9 +1,15 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
 
 export default function Category() {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
+
   return (
-    <section className="py-16 bg-gray-800">
+    <section ref={ref} className="py-16 bg-gray-800">
       <div className="container mx-auto flex justify-center">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {[
@@ -11,8 +17,13 @@ export default function Category() {
             { name: "Pants", src: "/images/category/pants.jpg" },
             { name: "Shoes", src: "/images/category/shoes.jpg" },
             { name: "Accessories", src: "/images/category/acc.jpg" },
-          ].map(({ name, src }) => (
-            <div key={name}>
+          ].map(({ name, src }, index) => (
+            <motion.div
+              key={name}
+              initial={{ opacity: 0, y: 50 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+              transition={{ duration: 0.5, delay: index * 0.2 }}
+            >
               <Link className="relative shadow-xl" href={"/shop"}>
                 <Image
                   className="cover w-full h-full opacity-70"
@@ -26,7 +37,7 @@ export default function Category() {
                   <div className="justify-left">Shop Now 〉 </div>
                 </div>
               </Link>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
