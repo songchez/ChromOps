@@ -10,8 +10,8 @@ const navItems = [
 
 export default function MypageLayout({ children }) {
   return (
-    <div className="flex text-zinc-950 bg-white">
-      <nav className="w-64 h-screen bg-gray-100 p-6">
+    <div className="flex text-zinc-950 bg-white max-w-6xl mx-auto">
+      <nav className="w-64 h-screen p-6">
         <h2 className="text-xl font-bold mb-6">마이페이지</h2>
         <ul>
           {navItems.map((item) => (
@@ -19,7 +19,7 @@ export default function MypageLayout({ children }) {
               <li key={item.href} className="mb-4">
                 <Link
                   href={item.href}
-                  className="text-gray-700 hover:text-black"
+                  className="text-gray-800 hover:text-yellow-700"
                 >
                   {item.label}
                 </Link>
