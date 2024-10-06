@@ -36,13 +36,19 @@ export default async function AdminLayout({
             href="/admin/addproducts"
             className="block py-2 px-4 text-gray-700 hover:bg-gray-200"
           >
-            상품 관리
+            상품등록
           </Link>
           <Link
             href="/admin/sales"
             className="block py-2 px-4 text-gray-700 hover:bg-gray-200"
           >
-            판매 현황
+            판매현황
+          </Link>
+          <Link
+            href="/admin/products"
+            className="block py-2 px-4 text-gray-700 hover:bg-gray-200"
+          >
+            상품목록
           </Link>
         </nav>
       </aside>
