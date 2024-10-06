@@ -10,9 +10,12 @@ export default function Hero() {
           alt="Tactical operations"
           fill={true}
           className="object-cover"
+          priority
         />
       </div>
-      <HeroText />
+      <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8">
+        <HeroText />
+      </div>
     </section>
   );
 }
