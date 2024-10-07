@@ -129,6 +129,6 @@ export default async function ProductPage({ params }) {
 export async function generateStaticParams() {
   const products = await prisma.product.findMany();
   return products.map((product) => ({
-    id: product.id,
+    slug: product.id,
   }));
 }
