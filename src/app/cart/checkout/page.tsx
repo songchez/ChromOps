@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { redirect, useRouter } from "next/navigation";
 import * as PortOne from "@portone/browser-sdk/v2";
 import { ShippingForm } from "@/components/checkout/ShippingForm";
 import { PaymentMethodSelector } from "@/components/checkout/PaymentMethodSelector";
 import { OrderSummary } from "@/components/checkout/OrderSummary";
 import Script from "next/script";
+import { useSession } from "next-auth/react";
 
 // 주소 타입 정의
 interface Address {
@@ -15,7 +15,7 @@ interface Address {
   zonecode: string;
 }
 
-const CheckoutPage: React.FC = () => {
+export default function CheckoutPage() {
   // 상태 관리
   const [isLoading, setIsLoading] = useState(false);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -30,7 +30,12 @@ const CheckoutPage: React.FC = () => {
   const [deliveryNote, setDeliveryNote] = useState("문앞에 놔주세요");
 
   const router = useRouter();
+
+  // 세션확인했는데 로그인 안되어 있으면 로그인으로 리다이렉트
   const { data: session, status } = useSession();
+  if (!session) {
+    redirect("/login");
+  }
 
   // 컴포넌트 마운트 시 장바구니 아이템 로드
   useEffect(() => {
@@ -184,6 +189,4 @@ const CheckoutPage: React.FC = () => {
       </div>
     </>
   );
-};
-
-export default CheckoutPage;
+}

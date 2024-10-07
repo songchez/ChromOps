@@ -1,5 +1,7 @@
 import React from "react";
 import Link from "next/link";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
 const navItems = [
   { href: "/mypage", label: "주문/배송조회" },
@@ -8,7 +10,11 @@ const navItems = [
   { href: "/mypage/account", label: "계정관리" },
 ];
 
-export default function MypageLayout({ children }) {
+export default async function MypageLayout({ children }) {
+  const session = await auth();
+  if (!session) {
+    redirect("/login");
+  }
   return (
     <div className="flex text-zinc-950 bg-white max-w-6xl mx-auto">
       <nav className="w-64 h-screen p-6">
