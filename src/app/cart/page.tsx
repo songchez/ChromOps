@@ -30,7 +30,7 @@ async function getCartProducts() {
     const product = products.find((item) => item.id === cartItem.id);
     return {
       ...cartItem,
-      mainImage: product.mainImages[0],
+      mainImage: product?.mainImages?.[0] || "",
     };
   });
 }
