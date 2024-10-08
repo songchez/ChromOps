@@ -50,11 +50,13 @@ export const OrderSummary: React.FC<OrderSummaryProps> = ({
         <button
           onClick={handlePayment}
           disabled={isDisabled}
-          className={`btn bg-blue-700 text-white w-full rounded-sm ${
-            isLoading ? "loading" : ""
-          }`}
+          className={`btn bg-blue-700 text-white w-full rounded-sm`}
         >
-          {isLoading ? "처리 중..." : "결제하기"}
+          {isLoading ? (
+            <span className="loading loading-infinity loading-lg"></span>
+          ) : (
+            "결제하기"
+          )}
         </button>
       </div>
     </div>
