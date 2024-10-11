@@ -79,9 +79,9 @@ export default async function ProductPage({ params }) {
               key={index}
               src={image}
               alt={`${product.name} 상세 이미지 ${index + 1}`}
-              width={870}
-              height={2000}
-              className="object-cover rounded-lg mb-4"
+              width={860}
+              height={1000}
+              className="rounded-sm mb-4"
             />
           ))}
         </div>

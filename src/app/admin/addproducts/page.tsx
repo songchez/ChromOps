@@ -17,6 +17,7 @@ export default function AddProductPage() {
     detailImages: [],
   });
   const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const savedData = localStorage.getItem("productFormData");
@@ -60,6 +61,7 @@ export default function AddProductPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true); // 제출 중인 상태를 true로 설정
     const formDataToSend = new FormData();
 
     for (const key in formData) {
@@ -94,6 +96,8 @@ export default function AddProductPage() {
     } catch (error) {
       console.error("상품 등록 중 오류 발생:", error);
       alert(error.message);
+    } finally {
+      setIsSubmitting(false); // 제출 완료 후 상태를 false로 설정
     }
   };
 
@@ -234,7 +238,12 @@ export default function AddProductPage() {
         >
           임시 저장
         </button>
-        <button type="submit" className="btn btn-primary w-1/3 ml-2 rounded-sm">
+        <button
+          type="submit"
+          className={`btn btn-primary w-1/3 ml-2 rounded-sm ${
+            isSubmitting ? "cursor-progress" : ""
+          }`}
+        >
           상품 등록
         </button>
       </div>
