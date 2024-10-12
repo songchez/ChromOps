@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 const navItems = [
   { href: "/mypage", label: "주문/배송조회" },
   { href: "/mypage/returns", label: "교환반품내역" },
-  { href: "/mypage/reviews", label: "상품리뷰" },
+  { href: "/mypage/reviews", label: "내가 쓴 리뷰" },
   { href: "/mypage/account", label: "계정관리" },
 ];
 

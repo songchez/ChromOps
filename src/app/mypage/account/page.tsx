@@ -1,5 +1,4 @@
 import React from "react";
-import prisma from "@/lib/prisma";
 import { auth } from "@/auth";
 
 export default async function Account() {

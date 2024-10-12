@@ -14,12 +14,19 @@ const s3Client = new S3Client({
 });
 
 export async function POST(request: Request) {
-  const { productId, productName, rating, comment, imageFile } =
-    await request.json();
+  const formData = await request.formData();
+  const productId = formData.get("productId") as string;
+  const productName = formData.get("productName") as string;
+  const rating = parseInt((formData.get("rating") as string) || "0", 10);
+  const comment = formData.get("comment") as string;
+  const imageFile = formData.get("imageFile") as File;
 
   // 현재유저를 리뷰어로 설정
   const session = await auth();
-  const userId = session.user.id;
+  const Currentuser = await prisma.user.findUnique({
+    where: { email: session.user.email },
+    select: { id: true },
+  });
 
   try {
     let reviewImage = "";
@@ -31,7 +38,7 @@ export async function POST(request: Request) {
     const review = await prisma.review.create({
       data: {
         productId,
-        userId,
+        userId: Currentuser.id,
         rating,
         comment,
         reviewImage,

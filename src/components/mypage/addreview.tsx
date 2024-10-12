@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { FaStar } from "react-icons/fa6";
 
 export default function AddReview({ product }: { product: Product }) {
-  const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
   const [review, setReview] = useState({
     comment: "",
     rating: 0,
@@ -13,19 +12,19 @@ export default function AddReview({ product }: { product: Product }) {
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   const handleReviewSubmit = async () => {
-    if (!selectedOrderId) return;
-
     const formData = new FormData();
     formData.append("productId", product.id);
-    formData.append("productName", product.name);
+    formData.append("productName", product.slug);
     formData.append("rating", review.rating.toString());
     formData.append("comment", review.comment);
 
     if (imageFile) {
       formData.append("imageFile", imageFile);
     }
-
     try {
+      formData.forEach((value, key) => {
+        console.log(key, value);
+      });
       const response = await fetch("/api/reviews", {
         method: "POST",
         body: formData,
@@ -42,7 +41,6 @@ export default function AddReview({ product }: { product: Product }) {
 
       setReview({ comment: "", rating: 0, reviewImage: "" });
       setImageFile(null);
-      setSelectedOrderId(null);
     } catch (error) {
       console.error("리뷰 작성 중 오류 발생:", error);
       const modal = document.getElementById("fail_modal") as HTMLDialogElement;
@@ -51,43 +49,47 @@ export default function AddReview({ product }: { product: Product }) {
       }
     }
   };
+
   return (
     <div>
-      {selectedOrderId && (
-        <div className="mt-4 p-4 border rounded">
-          <h2 className="text-xl">리뷰 작성</h2>
-          <textarea
-            className="textarea textarea-bordered w-full mt-2"
-            placeholder="리뷰를 작성하세요"
-            value={review.comment}
-            onChange={(e) => setReview({ ...review, comment: e.target.value })}
-          />
-          <div className="flex space-x-1 mt-2">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <button
-                key={star}
-                className={`text-2xl ${
-                  review.rating >= star ? "text-yellow-500" : "text-gray-400"
-                }`}
-                onClick={() => setReview({ ...review, rating: star })}
-              >
-                <FaStar />
-              </button>
-            ))}
-          </div>
-          <input
-            type="file"
-            className="file-input file-input-bordered w-full mt-2"
-            accept="image/*"
-            onChange={(e) => {
-              if (e.target.files) setImageFile(e.target.files[0]);
-            }}
-          />
-          <button className="btn btn-success mt-4" onClick={handleReviewSubmit}>
+      <div>
+        <div className="flex space-x-1 m-2">
+          {[1, 2, 3, 4, 5].map((star) => (
+            <button
+              key={star}
+              className={`text-2xl ${
+                review.rating >= star ? "text-yellow-400" : "text-gray-400"
+              }`}
+              onClick={() => setReview({ ...review, rating: star })}
+            >
+              <FaStar />
+            </button>
+          ))}
+        </div>
+        <textarea
+          className="textarea textarea-bordered w-full"
+          placeholder="고객님의 솔직하고 소중한 리뷰는 저희의 원동력입니다"
+          value={review.comment}
+          onChange={(e) => setReview({ ...review, comment: e.target.value })}
+        />
+
+        <input
+          type="file"
+          className="file-input file-input-bordered w-full mt-2"
+          accept="image/*"
+          onChange={(e) => {
+            if (e.target.files) setImageFile(e.target.files[0]);
+          }}
+        />
+        <div className="flex justify-end w-full">
+          <button
+            className="btn bg-blue-700 text-white mt-4 w-full rounded-md"
+            onClick={handleReviewSubmit}
+          >
             제출
           </button>
         </div>
-      )}
+      </div>
       <dialog id="success_modal" className="modal">
         <div className="modal-box">
           <p className="py-4">리뷰가 성공적으로 작성되었습니다.</p>
