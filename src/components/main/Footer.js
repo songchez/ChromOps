@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { FaInstagram } from "react-icons/fa6";
 import { FaYoutube } from "react-icons/fa6";
 
@@ -9,7 +10,11 @@ export default function Footer() {
           <h3 className="text-xl font-bold mb-2">ChromOps</h3>
           <p>Copyright © 2023 ChromOps</p>
         </div>
+
         <div className="flex space-x-4 text-2xl">
+          <Link href="/personalInforPolicy" className="text-sm">
+            개인정보처리방침
+          </Link>
           <a href="#" className="hover:text-yellow-500">
             <FaInstagram />
           </a>

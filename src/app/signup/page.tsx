@@ -66,7 +66,6 @@ export default function SignUpPage() {
                 />
               </div>
             </div>
-
             <div>
               <label
                 htmlFor="email"
@@ -87,7 +86,6 @@ export default function SignUpPage() {
                 />
               </div>
             </div>
-
             <div>
               <label
                 htmlFor="password"
@@ -108,7 +106,6 @@ export default function SignUpPage() {
                 />
               </div>
             </div>
-
             <div>
               <label
                 htmlFor="confirmPassword"
@@ -129,9 +126,7 @@ export default function SignUpPage() {
                 />
               </div>
             </div>
-
             {error && <div className="text-red-600 text-sm">{error}</div>}
-
             <div>
               <button
                 type="submit"
@@ -139,6 +134,9 @@ export default function SignUpPage() {
               >
                 회원가입
               </button>
+              <div className="text-blue-700 text-sm p-2">
+                회원가입시 개인정보처리방침에 동의한 것으로 간주합니다.
+              </div>
             </div>
           </form>
 
