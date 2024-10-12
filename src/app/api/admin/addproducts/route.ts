@@ -33,12 +33,12 @@ export async function POST(request: Request) {
   try {
     // 메인 이미지를 S3에 업로드
     const mainImageUrls = await Promise.all(
-      mainImages.map((image) => uploadImageToS3(image))
+      mainImages.map((image, idx) => uploadImageToS3(image, slug, idx))
     );
 
     // 상세 이미지들을 S3에 업로드
     const detailImageUrls = await Promise.all(
-      detailImages.map((image) => uploadImageToS3(image))
+      detailImages.map((image, idx) => uploadImageToS3(image, slug, idx))
     );
 
     // 데이터베이스에 새 상품을 생성
@@ -76,12 +76,16 @@ export async function POST(request: Request) {
 }
 
 // 이미지를 S3에 업로드하는 함수입니다.
-async function uploadImageToS3(file: File): Promise<string> {
+async function uploadImageToS3(
+  file: File,
+  productName: String,
+  idx: Number
+): Promise<string> {
   const fileBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(fileBuffer);
 
-  const fileName = `${crypto.randomUUID()}-${file.name}`;
-  const key = `products/${fileName}`;
+  const fileName = `${idx + crypto.randomUUID()}-${file.name}`;
+  const key = `products/${productName}/${fileName}`;
 
   const command = new PutObjectCommand({
     Bucket: process.env.AWS_S3_BUCKET_NAME,

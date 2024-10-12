@@ -108,6 +108,7 @@ model Review {
   product   Product  @relation(fields: [productId], references: [id])
   userId    String
   user      User     @relation(fields: [userId], references: [id])
+  reviewImage String 
   rating    Int
   comment   String
   createdAt DateTime @default(now())
