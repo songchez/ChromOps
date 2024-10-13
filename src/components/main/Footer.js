@@ -8,7 +8,10 @@ export default function Footer() {
       <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
         <div className="mb-4 md:mb-0">
           <h3 className="text-xl font-bold mb-2">ChromOps</h3>
-          <p>Copyright © 2023 ChromOps</p>
+          <p className="text-zinc-300">Copyright © 2024 ChromOps</p>
+          <p className="text-sm mt-1 text-zinc-300">
+            사업자등록번호 513-28-01829 메이비존(주)
+          </p>
         </div>
 
         <div className="flex space-x-4 text-2xl">

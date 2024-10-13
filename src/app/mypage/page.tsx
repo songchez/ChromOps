@@ -3,6 +3,7 @@ import { auth } from "@/auth";
 import AddReview from "@/components/mypage/addreview";
 import Image from "next/image";
 import { Session } from "next-auth";
+import SkeletonLoading from "@/components/mypage/SkeletonLoading";
 
 // 유저이메일을 기반으로 id가져오기
 async function getCurrentUser(session: Session) {
@@ -54,7 +55,9 @@ export default async function OrdersPage() {
     })
   );
 
-  return (
+  return !ordersWithProducts ? (
+    <SkeletonLoading />
+  ) : (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">주문 목록</h1>
       <ul className="space-y-4">
@@ -77,8 +80,8 @@ export default async function OrdersPage() {
                     <Image
                       src={item.product.mainImages[0]}
                       alt={item.product.name}
-                      width={120}
-                      height={120}
+                      width={100}
+                      height={100}
                       className="rounded"
                     />
                     <div className="flex flex-col">
@@ -119,10 +122,14 @@ export default async function OrdersPage() {
                 </li>
               ))}
             </ul>
-            <p className="font-bold mt-2">총 금액: {order.totalAmount} 원</p>
-            <button className="btn bg-blue-700 text-white rounded-md mt-2">
-              배송조회
-            </button>
+            <div className="flex justify-between items-center">
+              <p className="font-bold mt-2 text-lg">
+                총 금액: {order.totalAmount.toLocaleString("ko-kr")} 원
+              </p>
+              <button className="btn bg-blue-700 text-white rounded-sm mt-2">
+                배송조회
+              </button>
+            </div>
           </li>
         ))}
       </ul>
